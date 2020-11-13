@@ -1,0 +1,56 @@
+<fc:component>
+	<fc:param name="src" type="ImageSource" />
+	<fc:param name="sources" type="ImageSource[]" />
+	<fc:param name="alt" type="string" optional="1" />
+	<fc:param name="title" type="string" optional="1" />
+	<fc:param name="lazyload" type="boolean" optional="1" />
+	<fc:param name="preload" type="boolean" optional="1" />
+
+	<fc:renderer>
+		<picture>
+			<f:for each="{sources}" as="source">
+				<fmc:picture.source
+					src="{f:if(condition: source.image, then source.image, else: src)}"
+					crop="{source.crop}"
+					srcset="{source.srcset}"
+					sizes="{source.sizes}"
+					media="{source.media}"
+					format="{source.format}"
+					preload="{preload}"
+				/>
+			</f:for>
+			<fmc:image src="{src}" alt="{alt}" title="{title}" lazyload="{lazyload}" preload="{preload}" />
+		</picture>
+	</fc:renderer>
+</fc:component>
+
+<!--
+class ImageSource
+{
+	Image $image;
+	SourceSet $srcset;
+	CropArea Crop;
+	string $sizes;
+	string $media;
+	string $format;
+}
+
+class CropArea
+{
+	createFromAspectRatio()
+	createFromHeightAndWidth()
+	createFromCoordinates()
+}
+
+AspectRatio (technisch) vs. CropVariant (semantisch)
+
+class SourceSet
+{
+	array $items;
+}
+
+FormatViewHelper
+CropViewHelper
+ScaleViewHelper
+SrcsetViewHelper
+-->

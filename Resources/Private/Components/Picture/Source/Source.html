@@ -1,0 +1,21 @@
+<fc:component>
+	<fc:param name="src" type="ImageSource" />
+	<fc:param name="crop" type="CropArea" optional="1" />
+	<fc:param name="srcset" type="SourceSet" optional="1" />
+	<fc:param name="sizes" type="string" optional="1" />
+	<fc:param name="media" type="string" optional="1" />
+	<fc:param name="format" type="string" optional="1" />
+
+	<fc:renderer>
+		<f:variable name="croppedImage" value="{src -> fmc:image.modify.format(format: format) -> fmc:image.modify.crop(crop: crop)}" />
+		<source
+			srcset="{croppedImage -> fmc:image.srcset(srcset: srcset, base: sourceImage}"
+			{f:if(condition: sizes, then: 'sizes="{sizes}"')}
+			{f:if(condition: media, then: 'sizes="{media}"')}
+			{f:if(condition: format, then: 'sizes="{format}"')}
+		/>
+		<f:if condition="{preload}">
+			<!-- TODO -->
+		</f:if>
+	</fc:renderer>
+</fc:component>

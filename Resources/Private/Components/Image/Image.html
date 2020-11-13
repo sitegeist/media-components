@@ -1,0 +1,33 @@
+<fc:component>
+	<fc:param name="src" type="ImageSource" />
+	<fc:param name="height" type="integer" optional="1" />
+	<fc:param name="width" type="integer" optional="1" />
+	<fc:param name="maxDimensions" type="boolean" optional="1" />
+	<fc:param name="crop" type="CropArea" optional="1" />
+	<fc:param name="srcset" type="SourceSet" optional="1" />
+	<fc:param name="sizes" type="string" optional="1" />
+	<fc:param name="format" type="string" optional="1" />
+	<fc:param name="alt" type="string" optional="1" />
+	<fc:param name="title" type="string" optional="1" />
+	<fc:param name="lazyload" type="boolean" optional="1" />
+	<fc:param name="preload" type="boolean" optional="1" />
+
+	<fc:renderer>
+		<f:variable name="croppedImage" value="{src -> fmc:image.modify.format(format: format) -> fmc:image.modify.crop(crop: crop)}" />
+		<f:variable name="fallbackImage" value="{croppedImage -> fmc:image.modify.scale(height: height, width: width, maxDimensions: maxDimensions)}" />
+		<img
+			src="{fallbackImage.publicUrl}"
+			srcset="{croppedImage -> fmc:image.srcset(srcset: srcset, base: fallbackImage)}"
+			height="{fallbackImage.height}"
+			width="{fallbackImage.width}"
+			alt="{f:if(condition: alt, then: alt, else: fallbackImage.alternative)}"
+			title="{f:if(condition: title, then: title, else: fallbackImage.title)}"
+			{f:if(condition: lazyload, then: 'loading="lazy"')}
+			{f:if(condition: sizes, then: 'sizes="{sizes}"')}
+			{f:if(condition: class, then: 'class="{class}"')}
+		/>
+		<f:if condition="{preload}">
+			<!-- TODO -->
+		</f:if>
+	</fc:renderer>
+</fc:component>
