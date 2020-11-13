@@ -19,7 +19,7 @@
 					preload="{preload}"
 				/>
 			</f:for>
-			<fmc:image src="{src}" alt="{alt}" title="{title}" lazyload="{lazyload}" preload="{preload}" />
+			<fmc:image src="{src}" alt="{alt}" title="{title}" lazyload="{lazyload}" preload="{preload}" class="{class}" />
 		</picture>
 	</fc:renderer>
 </fc:component>
@@ -30,8 +30,6 @@ class ImageSource
 	Image $image;
 	SourceSet $srcset;
 	CropArea Crop;
-	string $sizes;
-	string $media;
 	string $format;
 }
 

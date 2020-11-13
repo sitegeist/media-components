@@ -12,7 +12,7 @@
 			srcset="{croppedImage -> fmc:image.srcset(srcset: srcset, base: sourceImage}"
 			{f:if(condition: sizes, then: 'sizes="{sizes}"')}
 			{f:if(condition: media, then: 'sizes="{media}"')}
-			{f:if(condition: format, then: 'sizes="{format}"')}
+			{f:if(condition: croppedImage.format, then: 'sizes="{croppedImage.format}"')}
 		/>
 		<f:if condition="{preload}">
 			<!-- TODO -->
