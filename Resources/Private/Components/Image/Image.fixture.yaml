@@ -1,0 +1,11 @@
+default:
+    src:
+        height: 1000
+        width: 1000
+        alternative: 'original alt text'
+        title: 'original image title'
+    height: 600
+    width: 200
+    crop: 0.5
+    format: webp
+    title: 'Overwritten title'

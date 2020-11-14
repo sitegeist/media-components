@@ -7,37 +7,40 @@
 >
 
 <fc:component>
-	<fc:param name="src" type="ImageSource" />
-	<fc:param name="height" type="integer" optional="1" />
-	<fc:param name="width" type="integer" optional="1" />
-	<fc:param name="maxDimensions" type="boolean" optional="1" />
-	<fc:param name="crop" type="CropArea" optional="1" />
-	<fc:param name="srcset" type="SourceSet" optional="1" />
-	<fc:param name="sizes" type="string" optional="1" />
-	<fc:param name="format" type="string" optional="1" />
-	<fc:param name="alt" type="string" optional="1" />
-	<fc:param name="title" type="string" optional="1" />
-	<fc:param name="lazyload" type="boolean" optional="1" />
-	<fc:param name="preload" type="boolean" optional="1" />
+    <fc:param name="src" type="Sitegeist\MediaComponents\Domain\Model\ImageSource" />
+    <fc:param name="height" type="integer" optional="1" />
+    <fc:param name="width" type="integer" optional="1" />
+    <fc:param name="maxDimensions" type="boolean" optional="1" />
+    <fc:param name="crop" type="Sitegeist\MediaComponents\Domain\Model\CropArea" optional="1" />
+    <fc:param name="srcset" type="SourceSet" optional="1" />
+    <fc:param name="sizes" type="string" optional="1" />
+    <fc:param name="format" type="string" optional="1" />
+    <fc:param name="alt" type="string" optional="1" />
+    <fc:param name="title" type="string" optional="1" />
+    <fc:param name="lazyload" type="boolean" optional="1" />
+    <fc:param name="preload" type="boolean" optional="1" />
 
-	<fc:renderer>
-		<f:variable name="croppedImage" value="{src -> mvh:image.modify.format(format: format) -> mvh:image.modify.crop(crop: crop)}" />
-		<f:variable name="fallbackImage" value="{croppedImage -> mvh:image.modify.scale(height: height, width: width, maxDimensions: maxDimensions)}" />
-		<img
-			src="{fallbackImage.publicUrl}"
-			srcset="{croppedImage -> mvh:image.srcset(srcset: srcset, base: fallbackImage)}"
-			height="{fallbackImage.height}"
-			width="{fallbackImage.width}"
-			alt="{f:if(condition: alt, then: alt, else: fallbackImage.alternative)}"
-			title="{f:if(condition: title, then: title, else: fallbackImage.title)}"
-			{f:if(condition: lazyload, then: 'loading="lazy"')}
-			{f:if(condition: sizes, then: 'sizes="{sizes}"')}
-			{f:if(condition: class, then: 'class="{class}"')}
-		/>
-		<f:if condition="{preload}">
-			<!-- TODO -->
-		</f:if>
-	</fc:renderer>
+    <fc:renderer>
+        <f:spaceless>
+        <f:variable name="croppedImage" value="{src -> mvh:image.modify.format(format: format) -> mvh:image.modify.crop(crop: crop)}" />
+        <f:variable name="fallbackImage" value="{croppedImage -> mvh:image.modify.scale(height: height, width: width, maxDimensions: maxDimensions)}" />
+        <f:variable name="srcsetString" value="{croppedImage -> mvh:image.srcset(srcset: srcset, base: fallbackImage)}" />
+        <img
+            src="{fallbackImage.publicUrl}"
+            {f:if(condition: srcsetString, then: 'srcset="{srcsetString}"')}
+            {f:if(condition: fallbackImage.height, then: 'height="{fallbackImage.height}"')}
+            {f:if(condition: fallbackImage.width, then: 'width="{fallbackImage.width}"')}
+            alt="{f:if(condition: alt, then: alt, else: fallbackImage.alternative)}"
+            title="{f:if(condition: title, then: title, else: fallbackImage.title)}"
+            {f:if(condition: lazyload, then: 'loading="lazy"')}
+            {f:if(condition: sizes, then: 'sizes="{sizes}"')}
+            {f:if(condition: class, then: 'class="{class}"')}
+        />
+        <f:if condition="{preload}">
+            <!-- TODO -->
+        </f:if>
+        </f:spaceless>
+    </fc:renderer>
 </fc:component>
 
 </html>
