@@ -6,29 +6,29 @@
 >
 
 <fc:component>
-	<fc:param name="src" type="ImageSource" />
-	<fc:param name="sources" type="ImageSource[]" />
-	<fc:param name="alt" type="string" optional="1" />
-	<fc:param name="title" type="string" optional="1" />
-	<fc:param name="lazyload" type="boolean" optional="1" />
-	<fc:param name="preload" type="boolean" optional="1" />
+    <fc:param name="src" type="Sitegeist\MediaComponents\Domain\Model\ImageSource" />
+    <fc:param name="sources" type="Sitegeist\MediaComponents\Domain\Model\ImageSource[]" />
+    <fc:param name="alt" type="string" optional="1" />
+    <fc:param name="title" type="string" optional="1" />
+    <fc:param name="lazyload" type="boolean" optional="1" />
+    <fc:param name="preload" type="boolean" optional="1" />
 
-	<fc:renderer>
-		<picture>
-			<f:for each="{sources}" as="source">
-				<mc:picture.source
-					src="{f:if(condition: source.image, then source.image, else: src)}"
-					crop="{source.crop}"
-					srcset="{source.srcset}"
-					sizes="{source.sizes}"
-					media="{source.media}"
-					format="{source.format}"
-					preload="{preload}"
-				/>
-			</f:for>
-			<mc:image src="{src}" alt="{alt}" title="{title}" lazyload="{lazyload}" preload="{preload}" class="{class}" />
-		</picture>
-	</fc:renderer>
+    <fc:renderer>
+        <picture>
+            <f:for each="{sources}" as="source">
+                <mc:picture.source
+                    src="{f:if(condition: source.image, then source.image, else: src)}"
+                    crop="{source.crop}"
+                    srcset="{source.srcset}"
+                    sizes="{source.sizes}"
+                    media="{source.media}"
+                    format="{source.format}"
+                    preload="{preload}"
+                />
+            </f:for>
+            <mc:image src="{src}" alt="{alt}" title="{title}" lazyload="{lazyload}" preload="{preload}" class="{class}" />
+        </picture>
+    </fc:renderer>
 </fc:component>
 
 </html>
