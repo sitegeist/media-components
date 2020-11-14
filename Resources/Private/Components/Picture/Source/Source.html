@@ -1,3 +1,10 @@
+<html
+    xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+    xmlns:fc="http://typo3.org/ns/SMS/FluidComponents/ViewHelpers"
+    xmlns:mvh="http://typo3.org/ns/Sitegeist/MediaComponents/ViewHelpers"
+    data-namespace-typo3-fluid="true"
+>
+
 <fc:component>
 	<fc:param name="src" type="ImageSource" />
 	<fc:param name="crop" type="CropArea" optional="1" />
@@ -7,9 +14,9 @@
 	<fc:param name="format" type="string" optional="1" />
 
 	<fc:renderer>
-		<f:variable name="croppedImage" value="{src -> fmc:image.modify.format(format: format) -> fmc:image.modify.crop(crop: crop)}" />
+		<f:variable name="croppedImage" value="{src -> mvh:image.modify.format(format: format) -> mvh:image.modify.crop(crop: crop)}" />
 		<source
-			srcset="{croppedImage -> fmc:image.srcset(srcset: srcset, base: sourceImage}"
+			srcset="{croppedImage -> mvh:image.srcset(srcset: srcset, base: sourceImage}"
 			{f:if(condition: sizes, then: 'sizes="{sizes}"')}
 			{f:if(condition: media, then: 'sizes="{media}"')}
 			{f:if(condition: croppedImage.format, then: 'sizes="{croppedImage.format}"')}
@@ -19,3 +26,5 @@
 		</f:if>
 	</fc:renderer>
 </fc:component>
+
+</html>

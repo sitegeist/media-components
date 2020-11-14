@@ -1,3 +1,10 @@
+<html
+    xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+    xmlns:fc="http://typo3.org/ns/SMS/FluidComponents/ViewHelpers"
+    xmlns:mc="http://typo3.org/ns/Sitegeist/MediaComponents/Components"
+    data-namespace-typo3-fluid="true"
+>
+
 <fc:component>
 	<fc:param name="src" type="ImageSource" />
 	<fc:param name="sources" type="ImageSource[]" />
@@ -9,7 +16,7 @@
 	<fc:renderer>
 		<picture>
 			<f:for each="{sources}" as="source">
-				<fmc:picture.source
+				<mc:picture.source
 					src="{f:if(condition: source.image, then source.image, else: src)}"
 					crop="{source.crop}"
 					srcset="{source.srcset}"
@@ -19,36 +26,9 @@
 					preload="{preload}"
 				/>
 			</f:for>
-			<fmc:image src="{src}" alt="{alt}" title="{title}" lazyload="{lazyload}" preload="{preload}" class="{class}" />
+			<mc:image src="{src}" alt="{alt}" title="{title}" lazyload="{lazyload}" preload="{preload}" class="{class}" />
 		</picture>
 	</fc:renderer>
 </fc:component>
 
-<!--
-class ImageSource
-{
-	Image $image;
-	SourceSet $srcset;
-	CropArea Crop;
-	string $format;
-}
-
-class CropArea
-{
-	createFromAspectRatio()
-	createFromHeightAndWidth()
-	createFromCoordinates()
-}
-
-AspectRatio (technisch) vs. CropVariant (semantisch)
-
-class SourceSet
-{
-	array $items;
-}
-
-FormatViewHelper
-CropViewHelper
-ScaleViewHelper
-SrcsetViewHelper
--->
+</html>

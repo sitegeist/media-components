@@ -1,3 +1,11 @@
+<html
+    xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+    xmlns:fc="http://typo3.org/ns/SMS/FluidComponents/ViewHelpers"
+    xmlns:mvh="http://typo3.org/ns/Sitegeist/MediaComponents/ViewHelpers"
+    xmlns:mc="http://typo3.org/ns/Sitegeist/MediaComponents/Components"
+    data-namespace-typo3-fluid="true"
+>
+
 <fc:component>
 	<fc:param name="src" type="ImageSource" />
 	<fc:param name="height" type="integer" optional="1" />
@@ -13,11 +21,11 @@
 	<fc:param name="preload" type="boolean" optional="1" />
 
 	<fc:renderer>
-		<f:variable name="croppedImage" value="{src -> fmc:image.modify.format(format: format) -> fmc:image.modify.crop(crop: crop)}" />
-		<f:variable name="fallbackImage" value="{croppedImage -> fmc:image.modify.scale(height: height, width: width, maxDimensions: maxDimensions)}" />
+		<f:variable name="croppedImage" value="{src -> mvh:image.modify.format(format: format) -> mvh:image.modify.crop(crop: crop)}" />
+		<f:variable name="fallbackImage" value="{croppedImage -> mvh:image.modify.scale(height: height, width: width, maxDimensions: maxDimensions)}" />
 		<img
 			src="{fallbackImage.publicUrl}"
-			srcset="{croppedImage -> fmc:image.srcset(srcset: srcset, base: fallbackImage)}"
+			srcset="{croppedImage -> mvh:image.srcset(srcset: srcset, base: fallbackImage)}"
 			height="{fallbackImage.height}"
 			width="{fallbackImage.width}"
 			alt="{f:if(condition: alt, then: alt, else: fallbackImage.alternative)}"
@@ -31,3 +39,5 @@
 		</f:if>
 	</fc:renderer>
 </fc:component>
+
+</html>
