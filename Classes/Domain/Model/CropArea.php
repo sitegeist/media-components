@@ -5,11 +5,12 @@ namespace Sitegeist\MediaComponents\Domain\Model;
 
 use Sitegeist\MediaComponents\Interfaces\ConstructibleFromFloat;
 use SMS\FluidComponents\Interfaces\ConstructibleFromArray;
+use SMS\FluidComponents\Interfaces\ConstructibleFromInteger;
 use SMS\FluidComponents\Interfaces\ConstructibleFromString;
 use TYPO3\CMS\Core\Imaging\ImageManipulation\Area;
 use TYPO3\CMS\Core\Imaging\ImageManipulation\Ratio;
 
-class CropArea implements ConstructibleFromArray, ConstructibleFromFloat, ConstructibleFromString
+class CropArea implements ConstructibleFromArray, ConstructibleFromFloat, ConstructibleFromInteger, ConstructibleFromString
 {
     protected $area;
 
@@ -30,6 +31,12 @@ class CropArea implements ConstructibleFromArray, ConstructibleFromFloat, Constr
     }
 
     public static function fromFloat(float $ratio)
+    {
+        $ratio = new Ratio('', '', $ratio);
+        return new static(Area::createEmpty()->applyRatioRestriction($ratio));
+    }
+
+    public static function fromInteger(int $ratio)
     {
         $ratio = new Ratio('', '', $ratio);
         return new static(Area::createEmpty()->applyRatioRestriction($ratio));

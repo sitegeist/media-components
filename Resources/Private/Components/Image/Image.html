@@ -1,6 +1,7 @@
 <html
     xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
     xmlns:fc="http://typo3.org/ns/SMS/FluidComponents/ViewHelpers"
+    xmlns:ft="http://typo3.org/ns/Sitegeist/FluidTagbuilder/ViewHelpers"
     xmlns:mvh="http://typo3.org/ns/Sitegeist/MediaComponents/ViewHelpers"
     xmlns:mc="http://typo3.org/ns/Sitegeist/MediaComponents/Components"
     data-namespace-typo3-fluid="true"
@@ -12,7 +13,7 @@
     <fc:param name="width" type="integer" optional="1" />
     <fc:param name="maxDimensions" type="boolean" optional="1" />
     <fc:param name="crop" type="Sitegeist\MediaComponents\Domain\Model\CropArea" optional="1" />
-    <fc:param name="srcset" type="SourceSet" optional="1" />
+    <fc:param name="srcset" type="Sitegeist\MediaComponents\Domain\Model\SourceSet" optional="1" />
     <fc:param name="sizes" type="string" optional="1" />
     <fc:param name="format" type="string" optional="1" />
     <fc:param name="alt" type="string" optional="1" />
@@ -21,25 +22,22 @@
     <fc:param name="preload" type="boolean" optional="1" />
 
     <fc:renderer>
-        <f:spaceless>
         <f:variable name="croppedImage" value="{src -> mvh:image.modify.format(format: format) -> mvh:image.modify.crop(crop: crop)}" />
         <f:variable name="fallbackImage" value="{croppedImage -> mvh:image.modify.scale(height: height, width: width, maxDimensions: maxDimensions)}" />
-        <f:variable name="srcsetString" value="{croppedImage -> mvh:image.srcset(srcset: srcset, base: fallbackImage)}" />
-        <img
+        <ft:img
             src="{fallbackImage.publicUrl}"
-            {f:if(condition: srcsetString, then: 'srcset="{srcsetString}"')}
-            {f:if(condition: fallbackImage.height, then: 'height="{fallbackImage.height}"')}
-            {f:if(condition: fallbackImage.width, then: 'width="{fallbackImage.width}"')}
+            srcset="{croppedImage -> mvh:image.srcset(srcset: srcset, base: fallbackImage)}"
+            height="{fallbackImage.height}"
+            width="{fallbackImage.width}"
             alt="{f:if(condition: alt, then: alt, else: fallbackImage.alternative)}"
             title="{f:if(condition: title, then: title, else: fallbackImage.title)}"
-            {f:if(condition: lazyload, then: 'loading="lazy"')}
-            {f:if(condition: sizes, then: 'sizes="{sizes}"')}
-            {f:if(condition: class, then: 'class="{class}"')}
+            loading="{f:if(condition: lazyload, then: 'lazy')}"
+            sizes="{sizes}"
+            class="{class}"
         />
         <f:if condition="{preload}">
             <!-- TODO -->
         </f:if>
-        </f:spaceless>
     </fc:renderer>
 </fc:component>
 

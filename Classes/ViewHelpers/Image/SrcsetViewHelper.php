@@ -25,6 +25,17 @@ class SrcsetViewHelper extends \TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHel
         RenderingContextInterface $renderingContext
     ): string {
         $arguments['imageSource'] = $arguments['imageSource'] ?? $renderChildrenClosure();
-        return '';
+        // TODO generate sourceset
+        return sprintf(
+            '%s %sw',
+            $arguments['imageSource']->getOriginalImage()->getPublicUrl(),
+            $arguments['imageSource']->getOriginalImage()->getWidth()
+        );
+    }
+
+    public static function generateSrcsetString(ImageSource $imageSource, SourceSet $srcset, ImageSource $base = null): string
+    {
+        $base = $base ?? $imageSource;
+        $widths = $srcset->getSrcsetAndWidths($base->getWidth());
     }
 }

@@ -1,6 +1,7 @@
 <html
     xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
     xmlns:fc="http://typo3.org/ns/SMS/FluidComponents/ViewHelpers"
+    xmlns:ft="http://typo3.org/ns/Sitegeist/FluidTagbuilder/ViewHelpers"
     xmlns:mvh="http://typo3.org/ns/Sitegeist/MediaComponents/ViewHelpers"
     data-namespace-typo3-fluid="true"
 >
@@ -12,14 +13,15 @@
     <fc:param name="sizes" type="string" optional="1" />
     <fc:param name="media" type="string" optional="1" />
     <fc:param name="format" type="string" optional="1" />
+    <fc:param name="preload" type="boolean" optional="1" />
 
     <fc:renderer>
         <f:variable name="croppedImage" value="{src -> mvh:image.modify.format(format: format) -> mvh:image.modify.crop(crop: crop)}" />
-        <source
-            srcset="{croppedImage -> mvh:image.srcset(srcset: srcset, base: sourceImage}"
-            {f:if(condition: sizes, then: 'sizes="{sizes}"')}
-            {f:if(condition: media, then: 'sizes="{media}"')}
-            {f:if(condition: croppedImage.format, then: 'sizes="{croppedImage.format}"')}
+        <ft:source
+            srcset="{croppedImage -> mvh:image.srcset(srcset: srcset, base: sourceImage)}"
+            sizes="{sizes}"
+            media="{media}"
+            type="{croppedImage.format}"
         />
         <f:if condition="{preload}">
             <!-- TODO -->

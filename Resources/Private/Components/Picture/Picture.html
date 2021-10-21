@@ -1,6 +1,7 @@
 <html
     xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
     xmlns:fc="http://typo3.org/ns/SMS/FluidComponents/ViewHelpers"
+    xmlns:ft="http://typo3.org/ns/Sitegeist/FluidTagbuilder/ViewHelpers"
     xmlns:mc="http://typo3.org/ns/Sitegeist/MediaComponents/Components"
     data-namespace-typo3-fluid="true"
 >
@@ -14,20 +15,20 @@
     <fc:param name="preload" type="boolean" optional="1" />
 
     <fc:renderer>
-        <picture>
+        <ft:picture :spaceless="1">
             <f:for each="{sources}" as="source">
                 <mc:picture.source
-                    src="{f:if(condition: source.image, then source.image, else: src)}"
-                    crop="{source.crop}"
+                    src="{f:if(condition: source.image, then: source.image, else: src)}"
+                    format="{f:if(condition: source.format, then: source.format, else: src.format)}"
+                    crop="{f:if(condition: source.crop, then: source.crop, else: src.crop)}"
                     srcset="{source.srcset}"
                     sizes="{source.sizes}"
                     media="{source.media}"
-                    format="{source.format}"
                     preload="{preload}"
                 />
             </f:for>
             <mc:image src="{src}" alt="{alt}" title="{title}" lazyload="{lazyload}" preload="{preload}" class="{class}" />
-        </picture>
+        </ft:picture>
     </fc:renderer>
 </fc:component>
 

@@ -1,0 +1,18 @@
+default:
+    src:
+        height: 2800
+        width: 2800
+        alternative: 'original alt text'
+        title: 'original image title'
+        scale: 0.2
+    sources:
+        desktop:
+            srcset: '1000, 1200, 1400, 1600, 1800, 2000'
+            sizes: '(min-width: 1200px) 1200px, 100vw'
+            media: '(min-width: 1000px)'
+            crop: 0.5
+        mobile:
+            srcset: '600, 750, 900, 1050, 1200, 1400, 1600'
+            sizes: '100vw'
+            crop: 1
+    title: 'Overwritten title'

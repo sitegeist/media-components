@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Sitegeist\MediaComponents\Domain\Model;
 
 use Sitegeist\MediaComponents\Domain\Model\CropArea;
+use Sitegeist\MediaComponents\Domain\Model\SourceSet;
 use Sitegeist\MediaComponents\Interfaces\ConstructibleFromImage;
 use SMS\FluidComponents\Domain\Model\Image;
 use SMS\FluidComponents\Interfaces\ConstructibleFromArray;
@@ -11,7 +12,9 @@ use SMS\FluidComponents\Interfaces\ConstructibleFromExtbaseFile;
 use SMS\FluidComponents\Interfaces\ConstructibleFromFileInterface;
 use SMS\FluidComponents\Interfaces\ConstructibleFromInteger;
 use SMS\FluidComponents\Interfaces\ConstructibleFromString;
+use SMS\FluidComponents\Utility\ComponentArgumentConverter;
 use TYPO3\CMS\Core\Resource\FileInterface;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Domain\Model\FileReference;
 
 class ImageSource implements
@@ -51,19 +54,56 @@ class ImageSource implements
      */
     protected $format;
 
-    public function __construct(Image $originalImage, float $scale = null, CropArea $crop = null, string $format = null)
+    /**
+     * @var string
+     */
+    protected $media;
+
+    /**
+     * @var SourceSet
+     */
+    protected $srcset;
+
+    /**
+     * @var string
+     */
+    protected $sizes;
+
+    public function __construct(Image $originalImage = null)
     {
-        $this
-            ->setOriginalImage($originalImage)
-            ->setScale($scale)
-            ->setCrop($crop)
-            ->setFormat($format);
+        $this->setOriginalImage($originalImage);
     }
 
     public static function fromArray(array $value): ImageSource
     {
-        $image = Image::fromArray($value);
-        return new static($image);
+        try {
+            $image = Image::fromArray($value['originalImage'] ?? $value);
+        } catch (\SMS\FluidComponents\Exception\InvalidArgumentException $e) {
+            // TODO better error handling here:
+            // Image is not required, but invalid combination of parameters should
+            // be catched
+        }
+
+        $imageSource = new static($image);
+        $imageSource
+            ->setScale($value['scale'] ?? null)
+            ->setFormat($value['format'] ?? null)
+            ->setMedia($value['media'] ?? null)
+            ->setSizes($value['sizes'] ?? null);
+
+        if ($value['crop'] || $value['srcset']) {
+            $argumentConverter = GeneralUtility::makeInstance(ComponentArgumentConverter::class);
+
+            if ($value['crop']) {
+                $imageSource->setCrop($argumentConverter->convertValueToType($value['crop'], CropArea::class));
+            }
+
+            if ($value['srcset']) {
+                $imageSource->setSrcset($argumentConverter->convertValueToType($value['srcset'], SourceSet::class));
+            }
+        }
+
+        return $imageSource;
     }
 
     public static function fromString(string $value): ImageSource
@@ -96,7 +136,7 @@ class ImageSource implements
         return $this->originalImage;
     }
 
-    public function setOriginalImage(Image $image): self
+    public function setOriginalImage(?Image $image): self
     {
         $this->originalImage = $image;
         return $this;
@@ -135,7 +175,7 @@ class ImageSource implements
         return $this;
     }
 
-    public function getImage(): Image
+    public function getImage(): ?Image
     {
         $this->generateImage();
         return $this->image ?? $this->originalImage;
@@ -159,6 +199,49 @@ class ImageSource implements
     public function getDescription(): ?string
     {
         return $this->getImage()->getDescription();
+    }
+
+    public function getHeight(): ?int
+    {
+        return $this->getImage()->getHeight();
+    }
+
+    public function getWidth(): ?int
+    {
+        return $this->getImage()->getWidth();
+    }
+
+    public function getMedia(): ?string
+    {
+        return $this->media;
+    }
+
+    public function setMedia(?string $media): self
+    {
+        $this->media = $media;
+        return $this;
+    }
+
+    public function getSizes(): ?string
+    {
+        return $this->sizes;
+    }
+
+    public function setSizes(?string $sizes): self
+    {
+        $this->sizes = $sizes;
+        return $this;
+    }
+
+    public function getSrcset(): ?SourceSet
+    {
+        return $this->srcset;
+    }
+
+    public function setSrcset(?SourceSet $srcset): self
+    {
+        $this->srcset = $srcset;
+        return $this;
     }
 
     /**

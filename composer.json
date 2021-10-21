@@ -17,8 +17,9 @@
     "require": {
         "php": ">=7.2.0 <8",
         "sitegeist/fluid-components": "^2.3.0",
-        "typo3/cms-core": "^9.5 || ^10.4",
-        "typo3fluid/fluid": "^2"
+        "typo3/cms-core": "^9.5 || ^10.4 || ^11.2",
+        "typo3fluid/fluid": "^2",
+        "sitegeist/fluid-tagbuilder": "^1"
     },
     "require-dev": {
         "typo3/testing-framework": "^4.0 || ^6.0",
@@ -42,7 +43,8 @@
     "extra": {
         "typo3/cms": {
             "cms-package-dir": "{$vendor-dir}/typo3/cms",
-            "web-dir": ".Build/Web"
+            "web-dir": ".Build/Web",
+            "extension-key": "media_components"
         }
     },
     "scripts": {
