@@ -6,6 +6,7 @@ namespace Sitegeist\MediaComponents\Domain\Model;
 use Sitegeist\MediaComponents\Domain\Model\CropArea;
 use Sitegeist\MediaComponents\Domain\Model\SourceSet;
 use Sitegeist\MediaComponents\Interfaces\ConstructibleFromImage;
+use SMS\FluidComponents\Domain\Model\FalImage;
 use SMS\FluidComponents\Domain\Model\Image;
 use SMS\FluidComponents\Interfaces\ConstructibleFromArray;
 use SMS\FluidComponents\Interfaces\ConstructibleFromExtbaseFile;
@@ -16,6 +17,7 @@ use SMS\FluidComponents\Utility\ComponentArgumentConverter;
 use TYPO3\CMS\Core\Resource\FileInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Domain\Model\FileReference;
+use TYPO3\CMS\Extbase\Service\ImageService;
 
 class ImageSource implements
     ConstructibleFromArray,
@@ -69,9 +71,15 @@ class ImageSource implements
      */
     protected $sizes;
 
+    /**
+     * @var ImageService
+     */
+    protected $imageService;
+
     public function __construct(Image $originalImage = null)
     {
         $this->setOriginalImage($originalImage);
+        $this->imageService = GeneralUtility::makeInstance(ImageService::class);
     }
 
     public static function fromArray(array $value): ImageSource
@@ -256,6 +264,19 @@ class ImageSource implements
 
     protected function generateImage(): void
     {
-        // TODO calculate new image
+        $cropArea = $this->getCrop()->getArea();
+
+        $processingInstructions = [
+            'width' => $this->getOriginalImage()->getWidth() * $this->getScale(),
+            'height' => $this->getOriginalImage()->getHeight() * $this->getScale(),
+            'fileExtension' => $this->getFormat(),
+//          'minWidth' => $this->arguments['minWidth'],
+//          'minHeight' => $this->arguments['minHeight'],
+//          'maxWidth' => $this->arguments['maxWidth'],
+//          'maxHeight' => $this->arguments['maxHeight'],
+            'crop' => $cropArea->isEmpty() ? null : $cropArea->makeAbsoluteBasedOnFile($this->getOriginalImage()->getFile()),
+        ];
+
+        $this->image = new FalImage($this->imageService->applyProcessingInstructions($this->getOriginalImage()->getFile(), $processingInstructions));
     }
 }
