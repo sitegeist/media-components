@@ -26,8 +26,7 @@ class CropArea implements ConstructibleFromArray, ConstructibleFromFloat, Constr
 
     public static function fromArray(array $config)
     {
-        // TODO parse configuration
-        return new static(Area::createEmpty());
+        return new static(Area::createFromConfiguration($config));
     }
 
     public static function fromFloat(float $ratio)
