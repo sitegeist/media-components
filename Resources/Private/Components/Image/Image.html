@@ -36,7 +36,16 @@
             class="{class}"
         />
         <f:if condition="{preload}">
-            <!-- TODO -->
+            <f:comment>Maybe write a custom viewhelper instead of misusing the one from fluid</f:comment>
+            <f:asset.css
+                identifier="{fallbackImage.publicUrl}"
+                type="{fallbackImage.originalImage.file.properties.mime_type}"
+                rel="preload"
+                as="image"
+                href="{fallbackImage.publicUrl}"
+                additionalAttributes="{imagesrcset: '{croppedImage -> mvh:image.srcset(srcset: srcset, base: fallbackImage)}', imagesizes: sizes}"
+                importance="high"
+            />
         </f:if>
     </fc:renderer>
 </fc:component>
