@@ -16,7 +16,7 @@ class SrcsetViewHelper extends \TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHel
     {
         $this->registerArgument('imageSource', ImageSource::class, 'Image source (if not provided via content)');
         $this->registerArgument('srcset', SourceSet::class, 'srcset definition');
-        $this->registerArgument('base', ImageSource::class, 'Base image for pixel density calcuations');
+        $this->registerArgument('base', ImageSource::class, 'Base image for pixel density calculations');
     }
 
     public static function renderStatic(
@@ -33,11 +33,10 @@ class SrcsetViewHelper extends \TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHel
     {
         $output = [];
         $base = $base ?? $imageSource;
-        $baseWidth = $base->getOriginalImage()->getWidth();
-        $widths = $srcset->getSrcsetAndWidths($baseWidth);
+        $widths = $srcset->getSrcsetAndWidths($base->getWidth());
 
         foreach ($widths as $widthDescriptor => $width) {
-            $imageSource->setScale($width / $baseWidth);
+            $imageSource->setScale($width / $imageSource->getOriginalImage()->getWidth());
             $output[] = '/' . $imageSource->getPublicUrl() . ' ' . $widthDescriptor;
         }
 

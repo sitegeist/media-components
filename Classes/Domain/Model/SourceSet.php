@@ -30,13 +30,14 @@ class SourceSet implements ConstructibleFromArray, ConstructibleFromFloat, Const
             switch ($srcsetMode) {
                 case 'x':
                     $candidateWidth = (int) ($baseWidth * (float) substr($widthDescriptor, 0, -1));
+                    break;
 
                 case 'w':
                     $candidateWidth = (int) substr($widthDescriptor, 0, -1);
+                    break;
 
                 default:
                     $candidateWidth = (int) $widthDescriptor;
-                    $srcsetMode = 'w';
                     $widthDescriptor = $candidateWidth . 'w';
             }
             $srcset[$widthDescriptor] = $candidateWidth;
@@ -57,12 +58,12 @@ class SourceSet implements ConstructibleFromArray, ConstructibleFromFloat, Const
 
     public static function fromFloat(float $density)
     {
-        return new static([$density . 'x']);
+        return new static([$density . 'w']);
     }
 
     public static function fromInteger(int $density)
     {
-        return new static([$density . 'x']);
+        return new static([$density . 'w']);
     }
 
     public static function fromString(string $srcset)
