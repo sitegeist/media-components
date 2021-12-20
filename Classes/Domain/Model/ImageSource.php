@@ -264,7 +264,13 @@ class ImageSource implements
 
     protected function generateImage(): void
     {
-        $cropArea = $this->getCrop()->getArea();
+        $crop = null;
+        if ($this->getCrop()) {
+            $cropArea = $this->getCrop()->getArea();
+            if (!$cropArea->isEmpty()) {
+                $crop = $cropArea->makeAbsoluteBasedOnFile($this->getOriginalImage()->getFile());
+            }
+        }
 
         $processingInstructions = [
             'width' => $this->getOriginalImage()->getWidth() * $this->getScale(),
@@ -274,7 +280,7 @@ class ImageSource implements
 //          'minHeight' => $this->arguments['minHeight'],
 //          'maxWidth' => $this->arguments['maxWidth'],
 //          'maxHeight' => $this->arguments['maxHeight'],
-            'crop' => $cropArea->isEmpty() ? null : $cropArea->makeAbsoluteBasedOnFile($this->getOriginalImage()->getFile()),
+            'crop' => $crop,
         ];
 
         $this->image = new FalImage($this->imageService->applyProcessingInstructions($this->getOriginalImage()->getFile(), $processingInstructions));

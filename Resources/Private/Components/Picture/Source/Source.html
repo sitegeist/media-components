@@ -17,14 +17,24 @@
 
     <fc:renderer>
         <f:variable name="croppedImage" value="{src -> mvh:image.modify.format(format: format) -> mvh:image.modify.crop(crop: crop)}" />
+        <f:variable name="srcset" value="{croppedImage -> mvh:image.srcset(srcset: srcset, base: src)}" />
         <ft:source
-            srcset="{croppedImage -> mvh:image.srcset(srcset: srcset, base: sourceImage)}"
+            srcset="{srcset}"
             sizes="{sizes}"
             media="{media}"
             type="{croppedImage.format}"
         />
         <f:if condition="{preload}">
-            <!-- TODO -->
+            <f:comment>Maybe write a custom viewhelper instead of misusing the one from fluid</f:comment>
+            <f:asset.css
+                identifier="{src.publicUrl}"
+                type="{src.originalImage.file.properties.mime_type}"
+                rel="preload"
+                as="image"
+                href="{src.publicUrl}"
+                additionalAttributes="{imagesrcset: srcset, imagesizes: sizes}"
+                importance="high"
+            />
         </f:if>
     </fc:renderer>
 </fc:component>
