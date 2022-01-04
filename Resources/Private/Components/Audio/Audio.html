@@ -13,6 +13,7 @@
     <fc:param name="muted" type="boolean" optional="1" />
     <fc:param name="preload" type="string" optional="1" default="auto" />
     <fc:param name="fallbackText" type="string" optional="1" />
+    <fc:param name="crossorigin" type="string" optional="1" />
 
     <fc:renderer>
         <ft:audio
@@ -21,6 +22,7 @@
             loop="{loop}"
             muted="{muted}"
             preload="{preload}"
+            crossorigin="{crossorigin}"
         >
             <f:for each="{sources}" as="source">
                 <ft:source
