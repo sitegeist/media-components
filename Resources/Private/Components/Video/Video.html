@@ -1,0 +1,55 @@
+<html
+    xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+    xmlns:fc="http://typo3.org/ns/SMS/FluidComponents/ViewHelpers"
+    xmlns:ft="http://typo3.org/ns/Sitegeist/FluidTagbuilder/ViewHelpers"
+    data-namespace-typo3-fluid="true"
+>
+
+<fc:component>
+    <fc:param name="sources" type="TYPO3\CMS\Core\Resource\File[]" />
+    <fc:param name="tracks" type="Sitegeist\MediaComponents\Domain\Model\Track[]" optional="1" />
+    <fc:param name="width" type="int" optional="1" />
+    <fc:param name="height" type="int" optional="1" />
+    <fc:param name="autoplay" type="boolean" optional="1" />
+    <fc:param name="controls" type="boolean" optional="1" default="1" />
+    <fc:param name="loop" type="boolean" optional="1" />
+    <fc:param name="muted" type="boolean" optional="1" />
+    <fc:param name="poster" type="TYPO3\CMS\Core\Resource\File" optional="1" />
+    <fc:param name="preload" type="string" optional="1" default="auto" />
+    <fc:param name="fallbackText" type="string" optional="1" />
+    <fc:param name="crossorigin" type="string" optional="1" />
+    <fc:param name="playsinline" type="boolean" optional="1" />
+
+    <fc:renderer>
+        <ft:video
+            width="{width}"
+            height="{height}"
+            autoplay="{autoplay}"
+            controls="{controls}"
+            loop="{loop}"
+            muted="{muted}"
+            preload="{preload}"
+            poster="{poster.publicUrl}"
+            crossorigin="{crossorigin}"
+            playsinline="{playsinline}"
+        >
+            <f:for each="{sources}" as="source">
+                <ft:source
+                    src="{source.publicUrl}"
+                    type="{source.properties.mime_type}"
+                />
+            </f:for>
+            <f:if condition="{tracks}">
+                <f:for each="{tracks}" as="track">
+                    <ft:track default="{track.default}"
+                       kind="{track.kind}"
+                       srclang="{track.srclang}"
+                       src="{track.file.publicUrl}" />
+                </f:for>
+            </f:if>
+
+            {fallbackText}
+        </ft:video>
+    </fc:renderer>
+</fc:component>
+</html>
