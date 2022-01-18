@@ -11,11 +11,7 @@
     <fc:param name="sources" type="Sitegeist\MediaComponents\Domain\Model\ImageSource[]" />
     <fc:param name="height" type="integer" optional="1" />
     <fc:param name="width" type="integer" optional="1" />
-    <fc:param name="crop" type="Sitegeist\MediaComponents\Domain\Model\CropArea" optional="1" />
-    <fc:param name="srcset" type="Sitegeist\MediaComponents\Domain\Model\SourceSet" optional="1" />
     <fc:param name="maxDimensions" type="boolean" optional="1" />
-    <fc:param name="sizes" type="string" optional="1" />
-    <fc:param name="format" type="string" optional="1" />
     <fc:param name="alt" type="string" optional="1" />
     <fc:param name="title" type="string" optional="1" />
     <fc:param name="lazyload" type="boolean" optional="1" />
@@ -38,11 +34,11 @@
                 src="{src}"
                 height="{height}"
                 width="{width}"
-                crop="{crop}"
-                srcset="{srcset}"
+                crop="{src.crop}"
+                srcset="{src.srcset}"
                 maxDimensions="{maxDimensions}"
-                sizes="{sizes}"
-                format="{format}"
+                sizes="{src.sizes}"
+                format="{src.format}"
                 alt="{alt}"
                 title="{title}"
                 lazyload="{lazyload}"
