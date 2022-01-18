@@ -276,11 +276,7 @@ class ImageSource implements
             'width' => $this->getOriginalImage()->getWidth() * $this->getScale(),
             'height' => $this->getOriginalImage()->getHeight() * $this->getScale(),
             'fileExtension' => $this->getFormat(),
-//          'minWidth' => $this->arguments['minWidth'],
-//          'minHeight' => $this->arguments['minHeight'],
-//          'maxWidth' => $this->arguments['maxWidth'],
-//          'maxHeight' => $this->arguments['maxHeight'],
-            'crop' => $crop,
+            'crop' => $crop
         ];
 
         $this->image = new FalImage($this->imageService->applyProcessingInstructions($this->getOriginalImage()->getFile(), $processingInstructions));
