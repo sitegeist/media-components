@@ -3,7 +3,6 @@
     xmlns:fc="http://typo3.org/ns/SMS/FluidComponents/ViewHelpers"
     xmlns:ft="http://typo3.org/ns/Sitegeist/FluidTagbuilder/ViewHelpers"
     xmlns:mvh="http://typo3.org/ns/Sitegeist/MediaComponents/ViewHelpers"
-    xmlns:mc="http://typo3.org/ns/Sitegeist/MediaComponents/Components"
     data-namespace-typo3-fluid="true"
 >
 
@@ -36,8 +35,7 @@
             class="{class}"
         />
         <f:if condition="{preload}">
-            <f:comment>Maybe write a custom viewhelper instead of misusing the one from fluid</f:comment>
-            <f:asset.css
+            <mvh:preload
                 identifier="{fallbackImage.publicUrl}"
                 type="{fallbackImage.originalImage.file.properties.mime_type}"
                 rel="preload"

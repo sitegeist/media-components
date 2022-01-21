@@ -25,8 +25,7 @@
             type="{croppedImage.format}"
         />
         <f:if condition="{preload}">
-            <f:comment>Maybe write a custom viewhelper instead of misusing the one from fluid</f:comment>
-            <f:asset.css
+            <mvh:preload
                 identifier="{src.publicUrl}"
                 type="{src.originalImage.file.properties.mime_type}"
                 rel="preload"
