@@ -7,7 +7,7 @@ use SMS\FluidComponents\Exception\InvalidRemoteImageException;
 /**
  * Data structure for a remote image resource (URI) to be passed to a component
  */
-class RemoteTrack extends Track
+class RemoteFile extends File
 {
     /**
      * Type of file to differentiate implementations in Fluid templates

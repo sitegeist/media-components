@@ -9,7 +9,7 @@ use TYPO3\CMS\Core\Utility\PathUtility;
 /**
  * Data structure for a local file resource to be passed to a component
  */
-class LocalTrack extends Track
+class LocalFile extends File
 {
     /**
      * Type of file to differentiate implementations in Fluid templates
