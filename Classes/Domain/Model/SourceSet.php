@@ -30,9 +30,11 @@ class SourceSet implements ConstructibleFromArray, ConstructibleFromFloat, Const
             switch ($srcsetMode) {
                 case 'x':
                     $candidateWidth = (int) ($baseWidth * (float) substr($widthDescriptor, 0, -1));
+                    break;
 
                 case 'w':
                     $candidateWidth = (int) substr($widthDescriptor, 0, -1);
+                    break;
 
                 default:
                     $candidateWidth = (int) $widthDescriptor;
