@@ -312,7 +312,6 @@ services:
                 php -v | grep '^PHP'
                 if [ ${PHP_XDEBUG_ON} -eq 0 ]; then
                     XDEBUG_MODE=\"off\" \
-                    ls -al Web/typo3conf/ext \
                     bin/phpunit -c Web/typo3conf/ext/media_components/Build/UnitTests.xml ${EXTRA_TEST_OPTIONS} ${TEST_FILE};
                 else
                     DOCKER_HOST=`route -n | awk '/^0.0.0.0/ { print $$2 }'`
