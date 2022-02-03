@@ -5,6 +5,8 @@ namespace Sitegeist\MediaComponents\ViewHelpers\Image;
 
 use Sitegeist\MediaComponents\Domain\Model\ImageSource;
 use Sitegeist\MediaComponents\Domain\Model\SourceSet;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Service\ImageService;
 use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
 use TYPO3Fluid\Fluid\Core\ViewHelper\Traits\CompileWithContentArgumentAndRenderStatic;
 
@@ -34,10 +36,12 @@ class SrcsetViewHelper extends \TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHel
         $output = [];
         $base = $base ?? $imageSource;
         $widths = $srcset->getSrcsetAndWidths($base->getWidth());
+        $imageService = GeneralUtility::makeInstance(ImageService::class);
+        $localImageSource = clone $imageSource;
 
         foreach ($widths as $widthDescriptor => $width) {
-            $imageSource->setScale($width / $imageSource->getOriginalImage()->getWidth());
-            $output[] = '/' . $imageSource->getPublicUrl() . ' ' . $widthDescriptor;
+            $localImageSource->setScale($width / $imageSource->getOriginalImage()->getWidth());
+            $output[] = $imageService->getImageUri($localImageSource->getImage()->getFile()) . ' ' . $widthDescriptor;
         }
 
         return implode(', ', $output);
