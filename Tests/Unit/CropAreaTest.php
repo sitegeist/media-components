@@ -7,11 +7,6 @@ use TYPO3\CMS\Core\Imaging\ImageManipulation\Area;
 
 class CropAreaTest extends \TYPO3\TestingFramework\Core\Unit\UnitTestCase
 {
-    protected function setUp(): void
-    {
-        parent::setUp();
-    }
-
     /**
      * @test
      */

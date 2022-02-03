@@ -17,9 +17,9 @@
     "require": {
         "php": ">=7.2.0 <8.1",
         "sitegeist/fluid-components": "^3.1.0",
-        "typo3/cms-core": "^10.4 || ^11.2",
         "typo3fluid/fluid": "^2",
-        "sitegeist/fluid-tagbuilder": "^1"
+        "sitegeist/fluid-tagbuilder": "^1",
+        "typo3/minimal": "^10.4 || ^11.5"
     },
     "require-dev": {
         "typo3/testing-framework": "^4.0 || ^6.0",
