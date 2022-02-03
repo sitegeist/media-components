@@ -71,12 +71,12 @@ class SourceSet implements ConstructibleFromArray, ConstructibleFromFloat, Const
 
     public static function fromFloat(float $density)
     {
-        return new static([$density . 'w']);
+        return new static([$density . 'x']);
     }
 
     public static function fromInteger(int $density)
     {
-        return new static([$density . 'w']);
+        return new static([$density . 'x']);
     }
 
     public static function fromString(string $srcset)
