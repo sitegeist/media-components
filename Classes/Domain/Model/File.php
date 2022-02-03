@@ -196,12 +196,6 @@ class File implements
             ), 1562916607);
         }
 
-        $file
-            ->setDefault($value['default'] ?? 0)
-            ->setKind($value['kind'] ?? 'subtitles')
-            ->setLabel($value['label'] ?? '')
-            ->setSrclang($value['srclang'] ?? 'en');
-
         return $file;
     }
 

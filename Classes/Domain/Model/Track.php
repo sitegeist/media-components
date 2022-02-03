@@ -106,4 +106,18 @@ class Track extends File
         $this->srclang = $srclang;
         return $this;
     }
+
+    public static function fromArray(array $value): self
+    {
+        $file = parent::fromArray($value);
+        $track = new self($file->getFile());
+
+        $track
+            ->setDefault($value['default'] ?? 0)
+            ->setKind($value['kind'] ?? 'subtitles')
+            ->setLabel($value['label'] ?? '')
+            ->setSrclang($value['srclang'] ?? 'en');
+
+        return $track;
+    }
 }
