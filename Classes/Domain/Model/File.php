@@ -26,7 +26,7 @@ class File implements
     /**
      * File
      *
-     * @var \TYPO3\CMS\Extbase\Domain\Model\File
+     * @var \TYPO3\CMS\Core\Resource\File
      */
     protected $file;
 
@@ -308,7 +308,7 @@ class File implements
     }
 
     /**
-     * @return \TYPO3\CMS\Extbase\Domain\Model\File
+     * @return \TYPO3\CMS\Core\Resource\File
      */
     public function getFile(): FileInterface
     {
@@ -316,7 +316,7 @@ class File implements
     }
 
     /**
-     * @param \TYPO3\CMS\Extbase\Domain\Model\File $file
+     * @param \TYPO3\CMS\Core\Resource\File $file
      */
     public function setFile(FileInterface $file): self
     {
