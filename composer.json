@@ -16,7 +16,7 @@
     },
     "require": {
         "php": ">=7.2.0 <8",
-        "sitegeist/fluid-components": "^2.3.0",
+        "sitegeist/fluid-components": "dev-task/addFileModel",
         "typo3/cms-core": "^9.5 || ^10.4 || ^11.2",
         "typo3fluid/fluid": "^2",
         "sitegeist/fluid-tagbuilder": "^1"
@@ -38,7 +38,11 @@
     },
     "config": {
         "vendor-dir": ".Build/vendor",
-        "bin-dir": ".Build/bin"
+        "bin-dir": ".Build/bin",
+        "allow-plugins": {
+            "typo3/cms-composer-installers": true,
+            "typo3/class-alias-loader": true
+        }
     },
     "extra": {
         "typo3/cms": {

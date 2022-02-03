@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace Sitegeist\MediaComponents\Domain\Model;
 
+use SMS\FluidComponents\Domain\Model\File;
+
 class Track extends File
 {
     /**
