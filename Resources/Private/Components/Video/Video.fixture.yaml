@@ -1,0 +1,6 @@
+default:
+    sources:
+        fallbackText: Your browser does not support audio files
+        mp3: ''
+        ogg: ''
+        wav: ''

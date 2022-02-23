@@ -1,0 +1,37 @@
+<html
+    xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+    xmlns:fc="http://typo3.org/ns/SMS/FluidComponents/ViewHelpers"
+    xmlns:ft="http://typo3.org/ns/Sitegeist/FluidTagbuilder/ViewHelpers"
+    data-namespace-typo3-fluid="true"
+>
+
+<fc:component>
+    <fc:param name="sources" type="SMS\FluidComponents\Domain\Model\File[]" />
+    <fc:param name="autoplay" type="boolean" optional="1" />
+    <fc:param name="controls" type="boolean" optional="1" default="1" />
+    <fc:param name="loop" type="boolean" optional="1" />
+    <fc:param name="muted" type="boolean" optional="1" />
+    <fc:param name="preload" type="string" optional="1" default="auto" />
+    <fc:param name="fallbackText" type="string" optional="1" />
+    <fc:param name="crossorigin" type="string" optional="1" />
+
+    <fc:renderer>
+        <ft:audio
+            autoplay="{autoplay}"
+            controls="{controls}"
+            loop="{loop}"
+            muted="{muted}"
+            preload="{preload}"
+            crossorigin="{crossorigin}"
+        >
+            <f:for each="{sources}" as="source">
+                <ft:source
+                    src="{source.publicUrl}"
+                    type="{source.properties.mime_type}"
+                />
+            </f:for>
+            {fallbackText}
+        </ft:audio>
+    </fc:renderer>
+</fc:component>
+</html>

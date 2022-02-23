@@ -25,18 +25,32 @@ class SourceSet implements ConstructibleFromArray, ConstructibleFromFloat, Const
     public function getSrcsetAndWidths(int $baseWidth): array
     {
         $srcset = [];
+        $mixedMode = false;
+
+        foreach ($this->srcset as $widthDescriptor) {
+            if (substr($widthDescriptor, -1) === 'w') {
+                $mixedMode = true;
+                break;
+            }
+        }
+
+
         foreach ($this->srcset as $widthDescriptor) {
             $srcsetMode = substr($widthDescriptor, -1);
             switch ($srcsetMode) {
                 case 'x':
                     $candidateWidth = (int) ($baseWidth * (float) substr($widthDescriptor, 0, -1));
+                    if ($mixedMode === true) {
+                        $widthDescriptor = $candidateWidth . 'w';
+                    }
+                    break;
 
                 case 'w':
                     $candidateWidth = (int) substr($widthDescriptor, 0, -1);
+                    break;
 
                 default:
                     $candidateWidth = (int) $widthDescriptor;
-                    $srcsetMode = 'w';
                     $widthDescriptor = $candidateWidth . 'w';
             }
             $srcset[$widthDescriptor] = $candidateWidth;
