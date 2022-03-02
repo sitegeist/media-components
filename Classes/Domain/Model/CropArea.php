@@ -9,6 +9,7 @@ use SMS\FluidComponents\Interfaces\ConstructibleFromInteger;
 use SMS\FluidComponents\Interfaces\ConstructibleFromString;
 use TYPO3\CMS\Core\Imaging\ImageManipulation\Area;
 use TYPO3\CMS\Core\Imaging\ImageManipulation\Ratio;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class CropArea implements ConstructibleFromArray, ConstructibleFromFloat, ConstructibleFromInteger, ConstructibleFromString
 {
@@ -26,8 +27,7 @@ class CropArea implements ConstructibleFromArray, ConstructibleFromFloat, Constr
 
     public static function fromArray(array $config)
     {
-        // TODO parse configuration
-        return new static(Area::createEmpty());
+        return new static(Area::createFromConfiguration($config));
     }
 
     public static function fromFloat(float $ratio)
@@ -44,7 +44,16 @@ class CropArea implements ConstructibleFromArray, ConstructibleFromFloat, Constr
 
     public static function fromString(string $ratio)
     {
-        // TODO parse string
-        return new static(Area::createEmpty());
+        $area = Area::createEmpty();
+
+        if (substr_count($ratio, ':') === 1) {
+            list($x, $y) = GeneralUtility::trimExplode(':', $ratio);
+            $area = $area->applyRatioRestriction(new Ratio('', '', (float)$x/(float)$y));
+        } else if (substr_count($ratio, '/') === 1) {
+            list($x, $y) = GeneralUtility::trimExplode('/', $ratio);
+            $area = $area->applyRatioRestriction(new Ratio('', '', (float)$x/(float)$y));
+        }
+
+        return new static($area);
     }
 }

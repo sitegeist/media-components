@@ -15,8 +15,8 @@
         "issues": "https://github.com/sitegeist/media-components/issues"
     },
     "require": {
-        "php": ">=7.2.0 <8.1",
-        "sitegeist/fluid-components": "^3.1.0",
+        "php": ">=7.2.0 <8",
+        "sitegeist/fluid-components": "dev-task/addFileModel",
         "typo3fluid/fluid": "^2",
         "sitegeist/fluid-tagbuilder": "^1",
         "typo3/minimal": "^10.4 || ^11.5"
@@ -38,7 +38,11 @@
     },
     "config": {
         "vendor-dir": ".Build/vendor",
-        "bin-dir": ".Build/bin"
+        "bin-dir": ".Build/bin",
+        "allow-plugins": {
+            "typo3/cms-composer-installers": true,
+            "typo3/class-alias-loader": true
+        }
     },
     "extra": {
         "typo3/cms": {
