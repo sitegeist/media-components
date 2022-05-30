@@ -1,8 +1,0 @@
-page = PAGE
-page {
-    config.disableAllHeaderCode = 1
-    10 = FLUIDTEMPLATE
-    10 {
-        file =
-    }
-}

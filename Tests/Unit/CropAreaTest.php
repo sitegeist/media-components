@@ -12,7 +12,7 @@ class CropAreaTest extends \TYPO3\TestingFramework\Core\Unit\UnitTestCase
      */
     public function testFromArray()
     {
-        $cropArea = CropArea::fromArray([]);
+        $cropArea = CropArea::fromArray(['x' => 0, 'y' => 0, 'width' => 1.0, 'height' => 1.0]);
 
         $this->assertInstanceOf(CropArea::class, $cropArea);
         $this->assertInstanceOf(Area::class, $cropArea->getArea());

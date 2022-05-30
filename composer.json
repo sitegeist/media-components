@@ -15,14 +15,14 @@
         "issues": "https://github.com/sitegeist/media-components/issues"
     },
     "require": {
-        "php": ">=7.2.0 <8",
+        "php": ">=7.2.0 <8.1",
         "sitegeist/fluid-components": "dev-task/addFileModel",
         "typo3fluid/fluid": "^2",
         "sitegeist/fluid-tagbuilder": "^1",
-        "typo3/minimal": "^10.4 || ^11.5"
+        "typo3/minimal": "^11"
     },
     "require-dev": {
-        "typo3/testing-framework": "^4.0 || ^6.0",
+        "typo3/testing-framework": "^6.0 || ^7.0",
         "squizlabs/php_codesniffer": "^3.0",
         "editorconfig-checker/editorconfig-checker": "^10.0"
     },
