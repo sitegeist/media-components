@@ -22,7 +22,10 @@ class SourceSetTest extends \TYPO3\TestingFramework\Core\Unit\UnitTestCase
      */
     public function testFromFloat()
     {
-        $this->markTestIncomplete();
+        $sourceSet = SourceSet::fromFloat(0.5);
+
+        $this->assertInstanceOf(SourceSet::class, $sourceSet);
+        $this->assertEquals(['0.5x'], $sourceSet->getSrcset());
     }
 
     /**
@@ -30,7 +33,10 @@ class SourceSetTest extends \TYPO3\TestingFramework\Core\Unit\UnitTestCase
      */
     public function testFromInteger()
     {
-        $this->markTestIncomplete();
+        $sourceSet = SourceSet::fromInteger(2);
+
+        $this->assertInstanceOf(SourceSet::class, $sourceSet);
+        $this->assertEquals(['2x'], $sourceSet->getSrcset());
     }
 
     /**
@@ -38,6 +44,9 @@ class SourceSetTest extends \TYPO3\TestingFramework\Core\Unit\UnitTestCase
      */
     public function testFromString()
     {
-        $this->markTestIncomplete();
+        $sourceSet = SourceSet::fromString('10w,20w,30w');
+
+        $this->assertInstanceOf(SourceSet::class, $sourceSet);
+        $this->assertEquals(['10w', '20w', '30w'], $sourceSet->getSrcset());
     }
 }
