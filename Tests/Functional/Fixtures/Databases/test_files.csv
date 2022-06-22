@@ -7,6 +7,7 @@ sys_file,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 ,5,0,1643702183,0,0,1,2,0,/test_files/image.png,d6bfddce29329fb94e1e0a8a5442795063c6cb79,94c5002a291057f6cbf6ddba848daecc3c361a58,png,image/png,image.png,3fff48cdead43fa0f621d4bd6ca46ef1c59ae470,19081,1643702180,1643702180,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 ,6,0,1643702183,0,0,1,2,0,/test_files/image.webp,c3f068de706345d539c952755ec899aa0e665eaa,94c5002a291057f6cbf6ddba848daecc3c361a58,webp,image/webp,image.webp,ae2fb18e44c5bd0ac130cc66573f1ddcd54c5fe3,34920,1643702180,1643702180,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 ,7,0,1643702183,0,0,1,5,0,/test_files/video.mp4,b02d35c796bc7fcbe9204eb226aae7813bd5775d,94c5002a291057f6cbf6ddba848daecc3c361a58,mp4,video/mp4,video.mp4,da39a3ee5e6b4b0d3255bfef95601890afd80709,0,1643702180,1643702180,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,8,0,1643702183,0,0,1,5,0,/test_files/subtitles.vtt,b02d35c796bc7fcbe9204eb226aae7813bd5775d,94c5002a291057f6cbf6ddba848daecc3c361a58,vtt,text/vtt,subtitles.vtt,da39a3ee5e6b4b0d3255bfef95601890afd80709,0,1643702180,1643702180,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 
 sys_file_metadata,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 ,uid,pid,sys_language_uid,file,width,height
