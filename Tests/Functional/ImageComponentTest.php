@@ -5,12 +5,41 @@ namespace Sitegeist\MediaComponents\Tests\Functional;
 class ImageComponentTest extends AbstractComponentTest
 {
     /**
-     * @test
+     * @return string[][]
      */
-    public function imageComponentTest() {
-        $expectedResult = '<img src="fileadmin/_processed_/3/8/csm_image_f5e9868174.png" srcset="fileadmin/_processed_/3/8/csm_image_eb3133aa66.png 400w, fileadmin/_processed_/3/8/csm_image_3e8ddf5a1a.png 800w, fileadmin/_processed_/3/8/csm_image_693ab61bbf.png 1200w" height="500" width="500" />';
+    public function imageComponentTestProvider(): array
+    {
+        return [
+            'Only mandatory data provided' => [
+                '<img src="fileadmin/test_files/image.png" height="3840" width="3840" />',
+                '<mc:image src="5" />'
+            ],
+            'All data provided' => [
+                '<img src="fileadmin/_processed_/3/8/csm_image_3c73179ad3.jpg" srcset="fileadmin/_processed_/3/8/csm_image_2fe057fbe4.jpg 400w, fileadmin/_processed_/3/8/csm_image_00a46099c0.jpg 800w, fileadmin/_processed_/3/8/csm_image_622ce9e0c0.jpg 1200w" height="100" width="100" alt="Alt text" title="Title text" loading="lazy" sizes="(min-width: 400px) 400px, (min-width: 800px) 800px, (min-width:1200px) 1200px, 100vw" />',
+                '<mc:image
+                    src="5"
+                    width="500"
+                    height="100"
+                    maxDimensions="true"
+                    crop="1"
+                    srcset="400w, 800w, 1200w"
+                    sizes="(min-width: 400px) 400px, (min-width: 800px) 800px, (min-width:1200px) 1200px, 100vw"
+                    format="jpg"
+                    alt="Alt text"
+                    title="Title text"
+                    lazyload="true"
+                    preload="true"
+                />'
+            ]
+        ];
+    }
 
-        $view = $this->getTestView('<mc:image src="5" srcset="400w, 800w, 1200w" crop="1" width="500" height="100" />');
+    /**
+     * @test
+     * @dataProvider imageComponentTestProvider
+     */
+    public function imageComponentTest(string $expectedResult, string $input) {
+        $view = $this->getTestView($input);
         $result = $this->cleanUpTestResult($view->render());
 
         $this->assertStringContainsString($expectedResult, $result);
