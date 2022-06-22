@@ -139,7 +139,7 @@ class ImageSource implements
         return new static($value);
     }
 
-    public function getOriginalImage(): Image
+    public function getOriginalImage(): ?Image
     {
         return $this->originalImage;
     }
@@ -191,7 +191,13 @@ class ImageSource implements
 
     public function getPublicUrl(): string
     {
-        return $this->getImage()->getPublicUrl();
+        $image = $this->getImage();
+
+        if (!$image) {
+            return '';
+        }
+
+        return $image->getPublicUrl();
     }
 
     public function getAlternative(): ?string
@@ -264,21 +270,25 @@ class ImageSource implements
 
     protected function generateImage(): void
     {
-        $crop = null;
-        if ($this->getCrop()) {
-            $cropArea = $this->getCrop()->getArea();
-            if (!$cropArea->isEmpty()) {
-                $crop = $cropArea->makeAbsoluteBasedOnFile($this->getOriginalImage()->getFile());
+        $originalImage = $this->getOriginalImage();
+
+        if ($originalImage) {
+            $crop = null;
+            if ($this->getCrop()) {
+                $cropArea = $this->getCrop()->getArea();
+                if (!$cropArea->isEmpty()) {
+                    $crop = $cropArea->makeAbsoluteBasedOnFile($originalImage->getFile());
+                }
             }
+
+            $processingInstructions = [
+                'width' => $originalImage->getWidth() * $this->getScale(),
+                'height' => $originalImage->getHeight() * $this->getScale(),
+                'fileExtension' => $this->getFormat(),
+                'crop' => $crop
+            ];
+
+            $this->image = new FalImage($this->imageService->applyProcessingInstructions($originalImage->getFile(), $processingInstructions));
         }
-
-        $processingInstructions = [
-            'width' => $this->getOriginalImage()->getWidth() * $this->getScale(),
-            'height' => $this->getOriginalImage()->getHeight() * $this->getScale(),
-            'fileExtension' => $this->getFormat(),
-            'crop' => $crop
-        ];
-
-        $this->image = new FalImage($this->imageService->applyProcessingInstructions($this->getOriginalImage()->getFile(), $processingInstructions));
     }
 }
