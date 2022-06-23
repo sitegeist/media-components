@@ -19,7 +19,7 @@
         "sitegeist/fluid-components": "dev-task/addFileModel",
         "typo3fluid/fluid": "^2",
         "sitegeist/fluid-tagbuilder": "^1",
-        "typo3/minimal": "^11"
+        "typo3/cms-core": "^10.4 || ^11.4"
     },
     "require-dev": {
         "typo3/testing-framework": "^6.0 || ^7.0",
