@@ -15,8 +15,8 @@
         "issues": "https://github.com/sitegeist/media-components/issues"
     },
     "require": {
-        "php": ">=7.2.0 <8.1",
-        "sitegeist/fluid-components": "dev-task/addFileModel",
+        "php": ">=7.4.0 <8.1",
+        "sitegeist/fluid-components": "^3.3.0",
         "typo3fluid/fluid": "^2",
         "sitegeist/fluid-tagbuilder": "^1",
         "typo3/cms-core": "^10.4 || ^11.4"
