@@ -4,9 +4,19 @@ declare(strict_types=1);
 namespace Sitegeist\MediaComponents\Domain\Model;
 
 use SMS\FluidComponents\Domain\Model\File;
+use SMS\FluidComponents\Domain\Model\Traits\FalFileTrait;
 
 class Track extends File
 {
+    use FalFileTrait;
+
+    /**
+     * Type of file to differentiate implementations in Fluid templates
+     *
+     * @var string
+     */
+    protected $type = 'Track';
+
     /**
      * Default flag for track
      *
@@ -34,12 +44,6 @@ class Track extends File
      * @var string
      */
     protected $srclang = 'en';
-
-    /**
-     * @var string
-     */
-    protected $type = 'Track';
-
 
     /**
      * @return int
@@ -111,8 +115,8 @@ class Track extends File
 
     public static function fromArray(array $value): self
     {
-        $file = parent::fromArray($value);
-        $track = new self($file->getFile());
+        /** @var Track $track */
+        $track = parent::fromArray($value);
 
         $track
             ->setDefault($value['default'] ?? 0)

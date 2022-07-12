@@ -14,7 +14,7 @@
     <fc:param name="controls" type="boolean" optional="1" default="1" />
     <fc:param name="loop" type="boolean" optional="1" />
     <fc:param name="muted" type="boolean" optional="1" />
-    <fc:param name="poster" type="TYPO3\CMS\Core\Resource\File" optional="1" />
+    <fc:param name="poster" type="SMS\FluidComponents\Domain\Model\Image" optional="1" />
     <fc:param name="preload" type="string" optional="1" default="auto" />
     <fc:param name="fallbackText" type="string" optional="1" />
     <fc:param name="crossorigin" type="string" optional="1" />
@@ -29,7 +29,7 @@
             loop="{loop}"
             muted="{muted}"
             preload="{preload}"
-            poster="{poster.publicUrl}"
+            poster="{f:if(condition: poster, then: poster.publicUrl)}"
             crossorigin="{crossorigin}"
             playsinline="{playsinline}"
         >
@@ -42,9 +42,9 @@
             <f:if condition="{tracks}">
                 <f:for each="{tracks}" as="track">
                     <ft:track default="{track.default}"
-                       kind="{track.kind}"
-                       srclang="{track.srclang}"
-                       src="{track.file.publicUrl}" />
+                        kind="{track.kind}"
+                        srclang="{track.srclang}"
+                        src="{track.file.publicUrl}" />
                 </f:for>
             </f:if>
 
