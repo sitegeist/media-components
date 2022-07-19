@@ -22,4 +22,24 @@ call_user_func(function () {
         \Sitegeist\MediaComponents\Interfaces\ConstructibleFromImage::class,
         'fromImage'
     );
+    $componentArgumentConverter->addConversionInterface(
+        \SMS\FluidComponents\Domain\Model\FalImage::class,
+        \Sitegeist\MediaComponents\Interfaces\ConstructibleFromImage::class,
+        'fromImage'
+    );
+    $componentArgumentConverter->addConversionInterface(
+        \SMS\FluidComponents\Domain\Model\LocalImage::class,
+        \Sitegeist\MediaComponents\Interfaces\ConstructibleFromImage::class,
+        'fromImage'
+    );
+    $componentArgumentConverter->addConversionInterface(
+        \SMS\FluidComponents\Domain\Model\RemoteImage::class,
+        \Sitegeist\MediaComponents\Interfaces\ConstructibleFromImage::class,
+        'fromImage'
+    );
+    $componentArgumentConverter->addConversionInterface(
+        \SMS\FluidComponents\Domain\Model\PlaceholderImage::class,
+        \Sitegeist\MediaComponents\Interfaces\ConstructibleFromImage::class,
+        'fromImage'
+    );
 });

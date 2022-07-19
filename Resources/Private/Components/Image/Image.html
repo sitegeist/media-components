@@ -19,9 +19,10 @@
     <fc:param name="title" type="string" optional="1" />
     <fc:param name="lazyload" type="boolean" optional="1" />
     <fc:param name="preload" type="boolean" optional="1" />
+    <fc:param name="cropVariant" type="string" optional="1" />
 
     <fc:renderer>
-        <f:variable name="croppedImage" value="{src -> mvh:image.modify.format(format: format) -> mvh:image.modify.crop(crop: crop)}" />
+        <f:variable name="croppedImage" value="{src -> mvh:image.modify.format(format: format) -> mvh:image.modify.crop(crop: crop, cropVariant: cropVariant)}" />
         <f:variable name="fallbackImage" value="{croppedImage -> mvh:image.modify.scale(height: height, width: width, maxDimensions: maxDimensions)}" />
         <ft:img
             src="{fallbackImage.publicUrl}"

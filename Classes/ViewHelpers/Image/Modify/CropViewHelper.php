@@ -16,6 +16,7 @@ class CropViewHelper extends \TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelpe
     {
         $this->registerArgument('imageSource', ImageSource::class, 'Image source (if not provided via content)');
         $this->registerArgument('crop', CropArea::class, 'Crop area');
+        $this->registerArgument('cropVariant', 'string', 'Crop variant');
         $this->registerArgument('replace', 'boolean', 'Replace already existing crop with new crop', false, true);
     }
 
@@ -29,6 +30,10 @@ class CropViewHelper extends \TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelpe
             $croppedSource = clone $imageSource;
             // TODO check replace; combine crops
             $croppedSource->setCrop($arguments['crop']);
+        }
+        if ($arguments['cropVariant']) {
+            $croppedSource = clone $imageSource;
+            $croppedSource->useCropVariant($arguments['cropVariant']);
         }
         return $croppedSource ?? $imageSource;
     }

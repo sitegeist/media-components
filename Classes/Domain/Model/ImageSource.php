@@ -3,21 +3,25 @@ declare(strict_types=1);
 
 namespace Sitegeist\MediaComponents\Domain\Model;
 
-use Sitegeist\MediaComponents\Domain\Model\CropArea;
-use Sitegeist\MediaComponents\Domain\Model\SourceSet;
-use Sitegeist\MediaComponents\Interfaces\ConstructibleFromImage;
-use SMS\FluidComponents\Domain\Model\FalImage;
-use SMS\FluidComponents\Domain\Model\Image;
-use SMS\FluidComponents\Interfaces\ConstructibleFromArray;
-use SMS\FluidComponents\Interfaces\ConstructibleFromExtbaseFile;
-use SMS\FluidComponents\Interfaces\ConstructibleFromFileInterface;
-use SMS\FluidComponents\Interfaces\ConstructibleFromInteger;
-use SMS\FluidComponents\Interfaces\ConstructibleFromString;
-use SMS\FluidComponents\Utility\ComponentArgumentConverter;
 use TYPO3\CMS\Core\Resource\FileInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Domain\Model\FileReference;
+use SMS\FluidComponents\Domain\Model\Image;
 use TYPO3\CMS\Extbase\Service\ImageService;
+use SMS\FluidComponents\Domain\Model\FalImage;
+use SMS\FluidComponents\Domain\Model\LocalImage;
+use TYPO3\CMS\Extbase\Domain\Model\FileReference;
+use Sitegeist\MediaComponents\Domain\Model\CropArea;
+use Sitegeist\MediaComponents\Domain\Model\SourceSet;
+use SMS\FluidComponents\Domain\Model\PlaceholderImage;
+use SMS\FluidComponents\Interfaces\ImageWithDimensions;
+use SMS\FluidComponents\Interfaces\ConstructibleFromArray;
+use SMS\FluidComponents\Interfaces\ConstructibleFromString;
+use SMS\FluidComponents\Utility\ComponentArgumentConverter;
+use SMS\FluidComponents\Interfaces\ConstructibleFromInteger;
+use Sitegeist\MediaComponents\Interfaces\ConstructibleFromImage;
+use SMS\FluidComponents\Interfaces\ConstructibleFromExtbaseFile;
+use SMS\FluidComponents\Interfaces\ConstructibleFromFileInterface;
+use TYPO3\CMS\Core\Imaging\ImageManipulation\CropVariantCollection;
 
 class ImageSource implements
     ConstructibleFromArray,
@@ -84,31 +88,29 @@ class ImageSource implements
 
     public static function fromArray(array $value): ImageSource
     {
-        try {
-            $image = Image::fromArray($value['originalImage'] ?? $value);
-        } catch (\SMS\FluidComponents\Exception\InvalidArgumentException $e) {
-            // TODO better error handling here:
-            // Image is not required, but invalid combination of parameters should
-            // be catched
+        $argumentConverter = GeneralUtility::makeInstance(ComponentArgumentConverter::class);
+
+        if (isset($value['originalImage'])) {
+            $image = $argumentConverter->convertValueToType($value['originalImage'], Image::class);
         }
 
-        $imageSource = new static($image);
+        $imageSource = new static($image ?? null);
         $imageSource
             ->setScale($value['scale'] ?? null)
             ->setFormat($value['format'] ?? null)
             ->setMedia($value['media'] ?? null)
             ->setSizes($value['sizes'] ?? null);
 
-        if ($value['crop'] || $value['srcset']) {
-            $argumentConverter = GeneralUtility::makeInstance(ComponentArgumentConverter::class);
+        if (isset($value['crop'])) {
+            $imageSource->setCrop($argumentConverter->convertValueToType($value['crop'], CropArea::class));
+        }
 
-            if ($value['crop']) {
-                $imageSource->setCrop($argumentConverter->convertValueToType($value['crop'], CropArea::class));
-            }
+        if (isset($value['srcset'])) {
+            $imageSource->setSrcset($argumentConverter->convertValueToType($value['srcset'], SourceSet::class));
+        }
 
-            if ($value['srcset']) {
-                $imageSource->setSrcset($argumentConverter->convertValueToType($value['srcset'], SourceSet::class));
-            }
+        if (isset($value['cropVariant'])) {
+            $imageSource->useCropVariant($value['cropVariant']);
         }
 
         return $imageSource;
@@ -183,6 +185,20 @@ class ImageSource implements
         return $this;
     }
 
+    public function useCropVariant(string $cropVariant): self
+    {
+        if (!isset($this->originalImage->getProperties()['crop'])) {
+            // TODO error
+            return $this;
+        }
+
+        $cropVariantCollection = CropVariantCollection::create($this->originalImage->getProperties()['crop']);
+        $cropArea = $cropVariantCollection->getCropArea($cropVariant);
+        $this->setCrop(new CropArea($cropArea));
+
+        return $this;
+    }
+
     public function getImage(): ?Image
     {
         $this->generateImage();
@@ -217,12 +233,12 @@ class ImageSource implements
 
     public function getHeight(): ?int
     {
-        return $this->getImage()->getHeight();
+        return ($this->getImage() instanceof ImageWithDimensions) ? $this->getImage()->getHeight() : null;
     }
 
     public function getWidth(): ?int
     {
-        return $this->getImage()->getWidth();
+        return ($this->getImage() instanceof ImageWithDimensions) ? $this->getImage()->getWidth() : null;
     }
 
     public function getMedia(): ?string
@@ -272,7 +288,7 @@ class ImageSource implements
     {
         $originalImage = $this->getOriginalImage();
 
-        if ($originalImage) {
+        if ($originalImage instanceof FalImage) {
             $crop = null;
             if ($this->getCrop()) {
                 $cropArea = $this->getCrop()->getArea();
@@ -289,6 +305,13 @@ class ImageSource implements
             ];
 
             $this->image = new FalImage($this->imageService->applyProcessingInstructions($originalImage->getFile(), $processingInstructions));
+        } elseif ($originalImage instanceof LocalImage) {
+            // TODO
+        } elseif ($originalImage instanceof PlaceholderImage) {
+            $this->image = new PlaceholderImage(
+                $originalImage->getWidth() * $this->getScale(),
+                $originalImage->getHeight() * $this->getScale()
+            );
         }
     }
 }
