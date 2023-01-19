@@ -18,6 +18,11 @@ call_user_func(function () {
         'fromFloat'
     );
     $componentArgumentConverter->addConversionInterface(
+        \TYPO3\CMS\Core\Imaging\ImageManipulation\Area::class,
+        \Sitegeist\MediaComponents\Interfaces\ConstructibleFromArea::class,
+        'fromArea'
+    );
+    $componentArgumentConverter->addConversionInterface(
         \SMS\FluidComponents\Domain\Model\Image::class,
         \Sitegeist\MediaComponents\Interfaces\ConstructibleFromImage::class,
         'fromImage'

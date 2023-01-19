@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Sitegeist\MediaComponents\Domain\Model;
 
+use Sitegeist\MediaComponents\Interfaces\ConstructibleFromArea;
 use Sitegeist\MediaComponents\Interfaces\ConstructibleFromFloat;
 use SMS\FluidComponents\Interfaces\ConstructibleFromArray;
 use SMS\FluidComponents\Interfaces\ConstructibleFromInteger;
@@ -11,7 +12,7 @@ use TYPO3\CMS\Core\Imaging\ImageManipulation\Area;
 use TYPO3\CMS\Core\Imaging\ImageManipulation\Ratio;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
-class CropArea implements ConstructibleFromArray, ConstructibleFromFloat, ConstructibleFromInteger, ConstructibleFromString
+class CropArea implements ConstructibleFromArray, ConstructibleFromFloat, ConstructibleFromInteger, ConstructibleFromString, ConstructibleFromArea
 {
     protected $area;
 
@@ -23,6 +24,11 @@ class CropArea implements ConstructibleFromArray, ConstructibleFromFloat, Constr
     public function getArea(): Area
     {
         return $this->area;
+    }
+
+    public static function fromArea(Area $area)
+    {
+        return new static($area);
     }
 
     public static function fromArray(array $config)
