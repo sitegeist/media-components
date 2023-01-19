@@ -16,7 +16,6 @@ class CropViewHelper extends \TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelpe
     {
         $this->registerArgument('imageSource', ImageSource::class, 'Image source (if not provided via content)');
         $this->registerArgument('crop', CropArea::class, 'Crop area');
-        $this->registerArgument('replace', 'boolean', 'Replace already existing crop with new crop', false, true);
     }
 
     public static function renderStatic(
@@ -27,7 +26,6 @@ class CropViewHelper extends \TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelpe
         $imageSource = $arguments['imageSource'] ?? $renderChildrenClosure();
         if ($arguments['crop']) {
             $croppedSource = clone $imageSource;
-            // TODO check replace; combine crops
             $croppedSource->setCrop($arguments['crop']);
         }
         return $croppedSource ?? $imageSource;
