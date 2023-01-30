@@ -3,12 +3,11 @@ declare(strict_types=1);
 
 namespace Sitegeist\MediaComponents\Domain\Model;
 
-use Sitegeist\MediaComponents\Interfaces\ConstructibleFromFloat;
 use SMS\FluidComponents\Interfaces\ConstructibleFromArray;
 use SMS\FluidComponents\Interfaces\ConstructibleFromInteger;
 use SMS\FluidComponents\Interfaces\ConstructibleFromString;
 
-class SourceSet implements ConstructibleFromArray, ConstructibleFromFloat, ConstructibleFromInteger, ConstructibleFromString
+class SourceSet implements ConstructibleFromArray, ConstructibleFromInteger, ConstructibleFromString
 {
     protected $srcset = [];
 
@@ -24,27 +23,27 @@ class SourceSet implements ConstructibleFromArray, ConstructibleFromFloat, Const
 
     public function getSrcsetAndWidths(int $baseWidth): array
     {
-        $srcset = [];
-        $mixedMode = false;
-
+        $useAbsoluteWidth = false;
         foreach ($this->srcset as $widthDescriptor) {
-            if (substr($widthDescriptor, -1) === 'w') {
-                $mixedMode = true;
+            if (substr($widthDescriptor, -1) !== 'x') {
+                $useAbsoluteWidth = true;
                 break;
             }
         }
 
-
+        $srcset = [];
         foreach ($this->srcset as $widthDescriptor) {
             $srcsetMode = substr($widthDescriptor, -1);
             switch ($srcsetMode) {
+                // Relative dimensions
                 case 'x':
                     $candidateWidth = (int) ($baseWidth * (float) substr($widthDescriptor, 0, -1));
-                    if ($mixedMode === true) {
+                    if ($useAbsoluteWidth === true) {
                         $widthDescriptor = $candidateWidth . 'w';
                     }
                     break;
 
+                // Absolute dimensions
                 case 'w':
                     $candidateWidth = (int) substr($widthDescriptor, 0, -1);
                     break;
@@ -64,22 +63,17 @@ class SourceSet implements ConstructibleFromArray, ConstructibleFromFloat, Const
         return $this;
     }
 
-    public static function fromArray(array $srcset)
+    public static function fromArray(array $srcset): SourceSet
     {
         return new static($srcset);
     }
 
-    public static function fromFloat(float $density)
+    public static function fromInteger(int $width): SourceSet
     {
-        return new static([$density . 'x']);
+        return new static([$width]);
     }
 
-    public static function fromInteger(int $density)
-    {
-        return new static([$density . 'x']);
-    }
-
-    public static function fromString(string $srcset)
+    public static function fromString(string $srcset): SourceSet
     {
         return new static(explode(',', $srcset));
     }
