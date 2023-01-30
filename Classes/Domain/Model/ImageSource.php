@@ -124,14 +124,14 @@ class ImageSource implements
         return new static(Image::fromInteger($value));
     }
 
-    public static function fromFileInterface(FileInterface $value): ImageSource
+    public static function fromFileInterface(FileInterface $file): ImageSource
     {
-        return new static(Image::fromFileInterface($value));
+        return new static(Image::fromFileInterface($file));
     }
 
-    public static function fromExtbaseFile(FileReference $value): ImageSource
+    public static function fromExtbaseFile(FileReference $fileReference): ImageSource
     {
-        return new static(Image::fromExtbaseFile($value));
+        return new static(Image::fromExtbaseFile($fileReference));
     }
 
     public static function fromImage(Image $value): ImageSource
