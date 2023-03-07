@@ -3,9 +3,9 @@ declare(strict_types=1);
 
 namespace Sitegeist\MediaComponents\ViewHelpers\Image;
 
-use TYPO3\CMS\Core\Imaging\ImageManipulation\Area;
+use Sitegeist\MediaComponents\Domain\Model\CropArea;
+use SMS\FluidComponents\Interfaces\ImageWithCropVariants;
 use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
-use TYPO3\CMS\Core\Imaging\ImageManipulation\CropVariantCollection;
 use TYPO3Fluid\Fluid\Core\ViewHelper\Traits\CompileWithContentArgumentAndRenderStatic;
 
 class CropVariantViewHelper extends \TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper
@@ -14,7 +14,7 @@ class CropVariantViewHelper extends \TYPO3Fluid\Fluid\Core\ViewHelper\AbstractVi
 
     public function initializeArguments()
     {
-        $this->registerArgument('image', FileInterface::class, 'FAL file');
+        $this->registerArgument('image', ImageSource::class, 'Image object');
         $this->registerArgument('name', 'string', 'name of the crop variant that should be used', false, 'default');
     }
 
@@ -22,9 +22,12 @@ class CropVariantViewHelper extends \TYPO3Fluid\Fluid\Core\ViewHelper\AbstractVi
         array $arguments,
         \Closure $renderChildrenClosure,
         RenderingContextInterface $renderingContext
-    ): Area {
+    ): CropArea {
         $arguments['image'] = $arguments['image'] ?? $renderChildrenClosure();
-        $cropVariantCollection = CropVariantCollection::create((string)$arguments['image']->getProperty('crop'));
-        return $cropVariantCollection->getCropArea($arguments['name']);
+        if ($arguments['image'] instanceof ImageWithCropVariants) {
+            return new CropArea($arguments['image']->getCropVariant($arguments['name']));
+        } else {
+            return new CropArea;
+        }
     }
 }

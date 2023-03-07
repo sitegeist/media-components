@@ -10,6 +10,7 @@
     <fc:param name="src" type="Sitegeist\MediaComponents\Domain\Model\ImageSource" />
 
     <f:comment><!-- Cropping --></f:comment>
+    <fc:param name="cropVariant" type="string" optional="1" />
     <fc:param name="crop" type="Sitegeist\MediaComponents\Domain\Model\CropArea" optional="1" />
 
     <f:comment><!-- Scaling --></f:comment>
@@ -22,6 +23,9 @@
     <fc:param name="preload" type="boolean" optional="1" />
 
     <fc:renderer>
+        <f:if condition="!{crop} && {cropVariant}">
+            <f:variable name="crop" value="{src -> mvh:image.cropVariant(name: cropVariant)}" />
+        </f:if>
         <f:variable name="croppedImage" value="{src -> mvh:image.modify.format(format: format) -> mvh:image.modify.crop(crop: crop)}" />
         <f:variable name="srcset" value="{croppedImage -> mvh:image.srcset(srcset: srcset, base: src)}" />
         <ft:source
