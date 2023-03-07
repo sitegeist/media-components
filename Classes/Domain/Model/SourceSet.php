@@ -11,7 +11,7 @@ class SourceSet implements ConstructibleFromArray, ConstructibleFromInteger, Con
 {
     protected $srcset = [];
 
-    public function __construct(array $srcset)
+    public function __construct(array $srcset = [])
     {
         $this->setSrcset($srcset);
     }

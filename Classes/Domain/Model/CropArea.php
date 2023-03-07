@@ -16,9 +16,9 @@ class CropArea implements ConstructibleFromArray, ConstructibleFromFloat, Constr
 {
     protected $area;
 
-    public function __construct(Area $area)
+    public function __construct(Area $area = null)
     {
-        $this->area = $area;
+        $this->area = $area ?? Area::createEmpty();
     }
 
     public function getArea(): Area

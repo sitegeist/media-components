@@ -44,7 +44,7 @@ class ImageSource implements
     /**
      * @var float
      */
-    protected $scale;
+    protected $scale = 1.0;
 
     /**
      * @var CropArea
@@ -78,14 +78,18 @@ class ImageSource implements
 
     public function __construct(Image $originalImage = null)
     {
-        $this->setOriginalImage($originalImage);
         $this->imageService = GeneralUtility::makeInstance(ImageService::class);
+        $this
+            ->setOriginalImage($originalImage)
+            ->setCrop(new CropArea);
     }
 
     public static function fromArray(array $value): ImageSource
     {
+        $argumentConverter = GeneralUtility::makeInstance(ComponentArgumentConverter::class);
+
         try {
-            $image = Image::fromArray($value['originalImage'] ?? $value);
+            $image = $argumentConverter->convertValueToType($value['originalImage'], Image::class);
         } catch (\SMS\FluidComponents\Exception\InvalidArgumentException $e) {
             // TODO better error handling here:
             // Image is not required, but invalid combination of parameters should
@@ -172,32 +176,27 @@ class ImageSource implements
         return $this;
     }
 
-    public function getCrop(): ?CropArea
+    public function getCrop(): CropArea
     {
         return $this->crop;
     }
 
-    public function setCrop(?CropArea $crop): self
+    public function setCrop(CropArea $crop): self
     {
         $this->crop = $crop;
         return $this;
     }
 
-    public function getImage(): ?Image
+    public function getImage(): Image
     {
-        $this->generateImage();
+        // TODO throw exception if image is not defined
+        $this->processImage();
         return $this->image ?? $this->originalImage;
     }
 
     public function getPublicUrl(): string
     {
-        $image = $this->getImage();
-
-        if (!$image) {
-            return '';
-        }
-
-        return $image->getPublicUrl();
+        return $this->getImage()->getPublicUrl();
     }
 
     public function getAlternative(): ?string
@@ -268,7 +267,7 @@ class ImageSource implements
         return $this->getPublicUrl();
     }
 
-    protected function generateImage(): void
+    protected function processImage(): void
     {
         $originalImage = $this->getOriginalImage();
 

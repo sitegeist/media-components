@@ -8,8 +8,14 @@
 
 <fc:component>
     <fc:param name="src" type="Sitegeist\MediaComponents\Domain\Model\ImageSource" />
+
+    <f:comment><!-- Cropping --></f:comment>
     <fc:param name="crop" type="Sitegeist\MediaComponents\Domain\Model\CropArea" optional="1" />
+
+    <f:comment><!-- Scaling --></f:comment>
     <fc:param name="srcset" type="Sitegeist\MediaComponents\Domain\Model\SourceSet" optional="1" />
+
+    <f:comment><!-- Delivery --></f:comment>
     <fc:param name="sizes" type="string" optional="1" />
     <fc:param name="media" type="string" optional="1" />
     <fc:param name="format" type="string" optional="1" />
