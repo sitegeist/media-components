@@ -20,23 +20,12 @@ class SourceSetTest extends \TYPO3\TestingFramework\Core\Unit\UnitTestCase
     /**
      * @test
      */
-    public function testFromFloat()
-    {
-        $sourceSet = SourceSet::fromFloat(0.5);
-
-        $this->assertInstanceOf(SourceSet::class, $sourceSet);
-        $this->assertEquals(['0.5x'], $sourceSet->getSrcset());
-    }
-
-    /**
-     * @test
-     */
     public function testFromInteger()
     {
-        $sourceSet = SourceSet::fromInteger(2);
+        $sourceSet = SourceSet::fromInteger(200);
 
         $this->assertInstanceOf(SourceSet::class, $sourceSet);
-        $this->assertEquals(['2x'], $sourceSet->getSrcset());
+        $this->assertEquals([200], $sourceSet->getSrcset());
     }
 
     /**
