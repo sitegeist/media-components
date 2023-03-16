@@ -1,42 +1,24 @@
-```
-class ImageSource
-{
-	Image $image;
-	SourceSet $srcset;
-	CropArea Crop;
-	string $format;
-}
+# Media Components
 
-class CropArea
-{
-	createFromAspectRatio()
-	createFromHeightAndWidth()
-	createFromCoordinates()
-}
+**This extension is still in development and is clearly not ready for production usage.**
 
-AspectRatio (technisch) vs. CropVariant (semantisch)
+This extension provides ready-to-use [Fluid Components](https://github.com/sitegeist/fluid-components) for various media assets:
 
-class SourceSet
-{
-	array $items;
-}
+* Images
+    * [Image tag with support for srcset/sizes](./Resources/Private/Components/Image/Image.html)
+    * [Picture tag with support for image types and different responsive breakpoints](./Resources/Private/Components/Picture/Picture.html)
+* Audio files
+    * [HTML5 audio tag](./Resources/Private/Components/Audio/Audio.html)
+* Video files
+    * [HTML5 video tag with support for subtitles](./Resources/Private/Components/Video/Video.html)
 
-FormatViewHelper
-CropViewHelper
-ScaleViewHelper
-SrcsetViewHelper
-```
+## Current development
 
-```
-<mvh:tag tagName="img"
-	src="{fallbackImage.publicUrl}"
-	srcset="{croppedImage -> mvh:image.srcset(srcset: srcset, base: fallbackImage)}"
-	height="{fallbackImage.height}"
-	width="{fallbackImage.width}"
-	alt="{f:if(condition: alt, then: alt, else: fallbackImage.alternative)}"
-	title="{f:if(condition: title, then: title, else: fallbackImage.title)}"
-	loading="{f:if(condition: lazyload, then: 'lazy')}"
-	sizes="{sizes}"
-	class="{class}"
-/>
-```
+We try to decouple Fluid Components and Media Components while also enhancing the basic data structures in Fluid Components during development of Media Components. This leads to several Pull Requests in Fluid Components, which need to be merged and released before Media Components can be released.
+
+Current Pull Requests:
+
+* [Respect class inheritance during component argument conversion](https://github.com/sitegeist/fluid-components/pull/121)
+* [Provide image dimensions in data structures](https://github.com/sitegeist/fluid-components/pull/122)
+
+If you want to participate in the development, feel free to get in contact. You can also create issues, review pull requests or even contribute code.
