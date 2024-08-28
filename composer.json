@@ -7,8 +7,16 @@
     "keywords": ["typo3", "typo3-extension", "fluid", "typo3-fluid", "components", "html", "template", "media", "image", "responsive images", "video", "audio"],
     "authors": [
         {
+            "name": "Benjamin Tammling",
+            "email": "benjamin.tammling@sitegeist.de"
+        },
+        {
+            "name": "Ulrich Mathes",
+            "email": "mathes@sitegeist.de"
+        },
+        {
             "name": "Simon Praetorius",
-            "email": "praetorius@sitegeist.de"
+            "email": "moin@praetorius.me"
         }
     ],
     "support": {
