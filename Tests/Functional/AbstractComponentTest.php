@@ -8,14 +8,14 @@ use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 
 abstract class AbstractComponentTest extends FunctionalTestCase
 {
-    protected $initializeDatabase = true;
+    protected bool $initializeDatabase = true;
 
-    protected $testExtensionsToLoad = [
+    protected array $testExtensionsToLoad = [
         'typo3conf/ext/fluid_components',
         'typo3conf/ext/media_components'
     ];
 
-    protected $pathsToLinkInTestInstance = [
+    protected array $pathsToLinkInTestInstance = [
         'typo3_src/typo3conf/ext/media_components/Tests/Functional/Fixtures/Files' => 'fileadmin/test_files',
     ];
 
