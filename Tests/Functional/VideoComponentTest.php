@@ -40,7 +40,7 @@ class VideoComponentTest extends AbstractComponentTestCase
 
     #[Test]
     #[DataProvider('videoComponentTestProvider')]
-    public function videoComponentTestMinimal(string $expectedResult, string $input) {
+    public function videoComponentTestMinimal(string $expectedResult, string $input): void {
         $view = $this->getTestView($input);
         $result = $this->cleanUpTestResult($view->render());
 

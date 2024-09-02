@@ -11,7 +11,7 @@ class ScaleViewHelper extends \TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelp
 {
     use CompileWithContentArgumentAndRenderStatic;
 
-    public function initializeArguments()
+    public function initializeArguments(): void
     {
         $this->registerArgument('imageSource', ImageSource::class, 'Image source (if not provided via content)');
         $this->registerArgument('height', 'integer', 'Desired image height');

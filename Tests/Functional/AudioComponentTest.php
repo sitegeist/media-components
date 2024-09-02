@@ -35,7 +35,7 @@ class AudioComponentTest extends AbstractComponentTestCase
 
     #[Test]
     #[DataProvider('audioComponentTestProvider')]
-    public function audioComponentTest(string $expectedResult, string $input)
+    public function audioComponentTest(string $expectedResult, string $input): void
     {
         $view = $this->getTestView($input);
         $result = $this->cleanUpTestResult($view->render());

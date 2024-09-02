@@ -14,7 +14,7 @@ class SrcsetViewHelper extends \TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHel
 {
     use CompileWithContentArgumentAndRenderStatic;
 
-    public function initializeArguments()
+    public function initializeArguments(): void
     {
         $this->registerArgument('imageSource', ImageSource::class, 'Image source (if not provided via content)');
         $this->registerArgument('srcset', SourceSet::class, 'srcset definition');
@@ -26,7 +26,7 @@ class SrcsetViewHelper extends \TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHel
         \Closure $renderChildrenClosure,
         RenderingContextInterface $renderingContext
     ): string {
-        $arguments['imageSource'] = $arguments['imageSource'] ?? $renderChildrenClosure();
+        $arguments['imageSource'] ??= $renderChildrenClosure();
 
         if ($arguments['srcset'] instanceof SourceSet) {
             return self::generateSrcsetString($arguments['imageSource'], $arguments['srcset'], $arguments['base']);
@@ -38,7 +38,7 @@ class SrcsetViewHelper extends \TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHel
     public static function generateSrcsetString(ImageSource $imageSource, SourceSet $srcset, ImageSource $base = null): string
     {
         $output = [];
-        $base = $base ?? $imageSource;
+        $base ??= $imageSource;
         $widths = $srcset->getSrcsetAndWidths($base->getWidth());
         $imageService = GeneralUtility::makeInstance(ImageService::class);
         $localImageSource = clone $imageSource;

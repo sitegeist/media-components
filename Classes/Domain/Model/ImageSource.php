@@ -28,56 +28,27 @@ class ImageSource implements
     ConstructibleFromString
 {
     /**
-     * Original image
-     *
-     * @var Image
-     */
-    protected $originalImage;
-
-    /**
      * Image with applied modifications
-     *
-     * @var Image
      */
-    protected $image;
+    protected ?Image $image = null;
 
-    /**
-     * @var float
-     */
-    protected $scale = 1.0;
+    protected ?ImageService $imageService = null;
 
-    /**
-     * @var CropArea
-     */
-    protected $crop;
+    protected float $scale = 1.0;
 
-    /**
-     * @var string
-     */
-    protected $format;
+    protected ?CropArea $crop = null;
 
-    /**
-     * @var string
-     */
-    protected $media;
+    protected string $format = '';
 
-    /**
-     * @var SourceSet
-     */
-    protected $srcset;
+    protected string $media = '';
 
-    /**
-     * @var string
-     */
-    protected $sizes;
+    protected ?SourceSet $srcset = null;
 
-    /**
-     * @var ImageService
-     */
-    protected $imageService;
+    protected string $sizes = '';
 
-    public function __construct(Image $originalImage = null)
-    {
+    public function __construct(
+        protected $originalImage = null
+    ) {
         $this->imageService = GeneralUtility::makeInstance(ImageService::class);
         $this
             ->setOriginalImage($originalImage)
@@ -90,7 +61,7 @@ class ImageSource implements
 
         try {
             $image = $argumentConverter->convertValueToType($value['originalImage'], Image::class);
-        } catch (\SMS\FluidComponents\Exception\InvalidArgumentException $e) {
+        } catch (\SMS\FluidComponents\Exception\InvalidArgumentException) {
             // TODO better error handling here:
             // Image is not required, but invalid combination of parameters should
             // be catched
@@ -259,8 +230,6 @@ class ImageSource implements
 
     /**
      * Use public url of image as string representation of image objects
-     *
-     * @return string
      */
     public function __toString(): string
     {

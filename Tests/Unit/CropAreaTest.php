@@ -9,7 +9,7 @@ use TYPO3\CMS\Core\Imaging\ImageManipulation\Area;
 class CropAreaTest extends \TYPO3\TestingFramework\Core\Unit\UnitTestCase
 {
     #[Test]
-    public function testFromArray()
+    public function testFromArray(): void
     {
         $cropArea = CropArea::fromArray(['x' => 0, 'y' => 0, 'width' => 1.0, 'height' => 1.0]);
 
@@ -19,7 +19,7 @@ class CropAreaTest extends \TYPO3\TestingFramework\Core\Unit\UnitTestCase
     }
 
     #[Test]
-    public function testFromFloat()
+    public function testFromFloat(): void
     {
         $cropArea = CropArea::fromFloat(2.0);
 
@@ -29,7 +29,7 @@ class CropAreaTest extends \TYPO3\TestingFramework\Core\Unit\UnitTestCase
     }
 
     #[Test]
-    public function testFromInteger()
+    public function testFromInteger(): void
     {
         $cropArea = CropArea::fromInteger(4);
 
@@ -39,7 +39,7 @@ class CropAreaTest extends \TYPO3\TestingFramework\Core\Unit\UnitTestCase
     }
 
     #[Test]
-    public function testFromString()
+    public function testFromString(): void
     {
         $cropArea = CropArea::fromString('');
 

@@ -9,9 +9,7 @@ use SMS\FluidComponents\Interfaces\ConstructibleFromString;
 
 class SourceSet implements ConstructibleFromArray, ConstructibleFromInteger, ConstructibleFromString
 {
-    protected $srcset = [];
-
-    public function __construct(array $srcset = [])
+    public function __construct(protected array $srcset = [])
     {
         $this->setSrcset($srcset);
     }
@@ -25,7 +23,7 @@ class SourceSet implements ConstructibleFromArray, ConstructibleFromInteger, Con
     {
         $useAbsoluteWidth = false;
         foreach ($this->srcset as $widthDescriptor) {
-            if (substr($widthDescriptor, -1) !== 'x') {
+            if (!str_ends_with((string) $widthDescriptor, 'x')) {
                 $useAbsoluteWidth = true;
                 break;
             }
@@ -33,11 +31,11 @@ class SourceSet implements ConstructibleFromArray, ConstructibleFromInteger, Con
 
         $srcset = [];
         foreach ($this->srcset as $widthDescriptor) {
-            $srcsetMode = substr($widthDescriptor, -1);
+            $srcsetMode = substr((string) $widthDescriptor, -1);
             switch ($srcsetMode) {
                 // Relative dimensions
                 case 'x':
-                    $candidateWidth = (int) ($baseWidth * (float) substr($widthDescriptor, 0, -1));
+                    $candidateWidth = (int) ($baseWidth * (float) substr((string) $widthDescriptor, 0, -1));
                     if ($useAbsoluteWidth === true) {
                         $widthDescriptor = $candidateWidth . 'w';
                     }
@@ -45,7 +43,7 @@ class SourceSet implements ConstructibleFromArray, ConstructibleFromInteger, Con
 
                 // Absolute dimensions
                 case 'w':
-                    $candidateWidth = (int) substr($widthDescriptor, 0, -1);
+                    $candidateWidth = (int) substr((string) $widthDescriptor, 0, -1);
                     break;
 
                 default:

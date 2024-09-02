@@ -8,7 +8,7 @@ use Sitegeist\MediaComponents\Domain\Model\SourceSet;
 class SourceSetTest extends \TYPO3\TestingFramework\Core\Unit\UnitTestCase
 {
     #[Test]
-    public function testFromArray()
+    public function testFromArray(): void
     {
         $sourceSet = SourceSet::fromArray(['10w', '20w', '30w']);
 
@@ -17,7 +17,7 @@ class SourceSetTest extends \TYPO3\TestingFramework\Core\Unit\UnitTestCase
     }
 
     #[Test]
-    public function testFromInteger()
+    public function testFromInteger(): void
     {
         $sourceSet = SourceSet::fromInteger(200);
 
@@ -26,7 +26,7 @@ class SourceSetTest extends \TYPO3\TestingFramework\Core\Unit\UnitTestCase
     }
 
     #[Test]
-    public function testFromString()
+    public function testFromString(): void
     {
         $sourceSet = SourceSet::fromString('10w,20w,30w');
 

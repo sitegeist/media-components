@@ -39,7 +39,7 @@ class ImageComponentTest extends AbstractComponentTestCase
 
     #[Test]
     #[DataProvider('imageComponentTestProvider')]
-    public function imageComponentTest(string $expectedResult, string $input) {
+    public function imageComponentTest(string $expectedResult, string $input): void {
         $view = $this->getTestView($input);
         $result = $this->cleanUpTestResult($view->render());
 

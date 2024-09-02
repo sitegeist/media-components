@@ -12,7 +12,7 @@ class CropVariantViewHelper extends \TYPO3Fluid\Fluid\Core\ViewHelper\AbstractVi
 {
     use CompileWithContentArgumentAndRenderStatic;
 
-    public function initializeArguments()
+    public function initializeArguments(): void
     {
         $this->registerArgument('image', FileInterface::class, 'FAL file');
         $this->registerArgument('name', 'string', 'name of the crop variant that should be used', false, 'default');
@@ -23,7 +23,7 @@ class CropVariantViewHelper extends \TYPO3Fluid\Fluid\Core\ViewHelper\AbstractVi
         \Closure $renderChildrenClosure,
         RenderingContextInterface $renderingContext
     ): Area {
-        $arguments['image'] = $arguments['image'] ?? $renderChildrenClosure();
+        $arguments['image'] ??= $renderChildrenClosure();
         $cropVariantCollection = CropVariantCollection::create((string)$arguments['image']->getProperty('crop'));
         return $cropVariantCollection->getCropArea($arguments['name']);
     }

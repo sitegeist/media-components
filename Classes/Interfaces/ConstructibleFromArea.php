@@ -13,9 +13,6 @@ interface ConstructibleFromArea
 {
     /**
      * Creates an instance of the class based on the provided Area object
-     *
-     * @param Area $value
-     * @return object
      */
-    public static function fromArea(Area $value);
+    public static function fromArea(Area $value): object;
 }
