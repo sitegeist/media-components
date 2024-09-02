@@ -5,15 +5,12 @@ $EM_CONF['media_components'] = [
     'category' => 'fe',
     'author' => 'Benjamin Tammling, Ulrich Mathes, Simon Praetorius',
     'author_email' => 'benjamin.tammling@sitegeist.de, mathes@sitegeist.de, moin@praetorius.me',
-    'author_company' => 'sitegeist media solutions GmbH',
     'state' => 'stable',
-    'uploadfolder' => false,
-    'clearCacheOnLoad' => false,
-    'version' => '1.0.0-dev',
+    'version' => '',
     'constraints' => [
         'depends' => [
-            'typo3' => '9.5.0-11.9.99',
-            'php' => '7.2.0-7.9.99'
+            'typo3' => '13.2.0-13.2.99',
+            'php' => '8.2.0-8.3.99'
         ],
         'conflicts' => [
         ],
