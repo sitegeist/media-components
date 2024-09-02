@@ -61,10 +61,11 @@ Options:
             - postgres: use postgres
             - sqlite: use sqlite
 
-    -p <8.3|8.2>
+    -p <8.3|8.2|8.1>
         Specifies the PHP minor version to be used
-            - 8.3 (default): use PHP 8.3
-            - 8.2: use PHP 8.2
+            - 8.3: use PHP 8.3
+            - 8.2 (default): use PHP 8.2
+            - 8.1: use PHP 8.3
 
     -t <13>
         Specifies the TYPO3 version to be used
@@ -103,8 +104,8 @@ Examples:
     # Run unit tests using PHP 8.2
     ./Build/Scripts/runTests.sh
 
-    # Run unit tests using PHP 8.3
-    ./Build/Scripts/runTests.sh -p 8.3
+    # Run unit tests using PHP 8.1
+    ./Build/Scripts/runTests.sh -p 8.1
 EOF
 
 # Test if docker-compose exists, else exit out with error
@@ -130,7 +131,7 @@ else
 fi
 TEST_SUITE="unit"
 DBMS="mariadb"
-PHP_VERSION="8.3"
+PHP_VERSION="8.2"
 TYPO3_VERSION="13"
 PHP_XDEBUG_ON=0
 PHP_XDEBUG_PORT=9003
