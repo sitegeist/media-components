@@ -19,3 +19,7 @@ sys_file_metadata,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 pages,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 ,uid,pid,tstamp,crdate,cruser_id,deleted,hidden,starttime,endtime,fe_group,sorting,rowDescription,editlock,sys_language_uid,l10n_parent,l10n_source,l10n_state,t3_origuid,l10n_diffsource,perms_userid,perms_groupid,perms_user,perms_group,perms_everybody,title,slug,doktype,TSconfig,is_siteroot,php_tree_stop,url,shortcut,shortcut_mode,subtitle,layout,target,media,lastUpdated,keywords,cache_timeout,cache_tags,newUntil,no_search,module,extendToSubpages,nav_title,nav_hide,content_from_pid,mount_pid,mount_pid_ol,l18n_cfg,fe_login_mode,backend_layout,backend_layout_next_level,tsconfig_includes,categories
 ,1,0,1634541815,1634541815,1,0,0,0,0,0,0,NULL,0,0,0,0,NULL,0,NULL,1,1,31,31,1,Home,/,1,NULL,1,0,,0,0,,0,,0,0,NULL,0,,0,0,,0,,0,0,0,0,0,0,,,NULL,0
+
+"be_users",,,,,,,
+,"uid","pid","username","usergroup","deleted","admin","options"
+,1,0,"admin",,0,1,0
