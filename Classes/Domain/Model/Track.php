@@ -13,7 +13,7 @@ class Track extends File
     /**
      * Type of file to differentiate implementations in Fluid templates
      */
-    protected string$type = 'Track';
+    protected string $type = 'Track';
 
     protected int $default = 0;
 

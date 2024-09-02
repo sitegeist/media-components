@@ -47,12 +47,10 @@ class ImageSource implements
     protected string $sizes = '';
 
     public function __construct(
-        protected $originalImage = null
+        protected ?Image $originalImage = null
     ) {
         $this->imageService = GeneralUtility::makeInstance(ImageService::class);
-        $this
-            ->setOriginalImage($originalImage)
-            ->setCrop(new CropArea);
+        $this->setCrop(new CropArea);
     }
 
     public static function fromArray(array $value): ImageSource
@@ -68,20 +66,28 @@ class ImageSource implements
         }
 
         $imageSource = new static($image);
-        $imageSource
-            ->setScale($value['scale'] ?? null)
-            ->setFormat($value['format'] ?? null)
-            ->setMedia($value['media'] ?? null)
-            ->setSizes($value['sizes'] ?? null);
 
-        if ($value['crop'] || $value['srcset']) {
+        if (isset($value['scale'])) {
+            $imageSource->setScale((float) $value['scale']);
+        }
+        if (isset($value['format'])) {
+            $imageSource->setFormat((string) $value['format']);
+        }
+        if (isset($value['media'])) {
+            $imageSource->setMedia((string) $value['media']);
+        }
+        if (isset($value['scale'])) {
+            $imageSource->setSizes((string) $value['sizes']);
+        }
+
+        if (isset($value['crop']) || isset($value['srcset'])) {
             $argumentConverter = GeneralUtility::makeInstance(ComponentArgumentConverter::class);
 
-            if ($value['crop']) {
+            if (isset($value['crop'])) {
                 $imageSource->setCrop($argumentConverter->convertValueToType($value['crop'], CropArea::class));
             }
 
-            if ($value['srcset']) {
+            if (isset($value['srcset'])) {
                 $imageSource->setSrcset($argumentConverter->convertValueToType($value['srcset'], SourceSet::class));
             }
         }
@@ -119,7 +125,7 @@ class ImageSource implements
         return $this->originalImage;
     }
 
-    public function setOriginalImage(?Image $image): self
+    public function setOriginalImage(Image $image): self
     {
         $this->originalImage = $image;
         return $this;
@@ -130,7 +136,7 @@ class ImageSource implements
         return $this->scale;
     }
 
-    public function setScale(?float $scale): self
+    public function setScale(float $scale): self
     {
         $this->scale = $scale;
         return $this;
@@ -141,7 +147,7 @@ class ImageSource implements
         return $this->format;
     }
 
-    public function setFormat(?string $format): self
+    public function setFormat(string $format): self
     {
         $this->format = $format;
         return $this;
@@ -200,7 +206,7 @@ class ImageSource implements
         return $this->media;
     }
 
-    public function setMedia(?string $media): self
+    public function setMedia(string $media): self
     {
         $this->media = $media;
         return $this;
@@ -211,7 +217,7 @@ class ImageSource implements
         return $this->sizes;
     }
 
-    public function setSizes(?string $sizes): self
+    public function setSizes(string $sizes): self
     {
         $this->sizes = $sizes;
         return $this;
@@ -222,7 +228,7 @@ class ImageSource implements
         return $this->srcset;
     }
 
-    public function setSrcset(?SourceSet $srcset): self
+    public function setSrcset(SourceSet $srcset): self
     {
         $this->srcset = $srcset;
         return $this;
