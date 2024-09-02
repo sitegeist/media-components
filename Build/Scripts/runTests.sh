@@ -39,7 +39,7 @@ Also used by github actions for test execution.
 
 Usage: $0 [options] [file]
 
-No arguments: Run all unit tests with PHP 7.4
+No arguments: Run all unit tests with PHP 8.2
 
 Options:
     -s <...>
@@ -61,15 +61,14 @@ Options:
             - postgres: use postgres
             - sqlite: use sqlite
 
-    -p <7.4|8.0>
+    -p <8.3|8.2>
         Specifies the PHP minor version to be used
-            - 7.4 (default): use PHP 7.4
-            - 8.0: use PHP 8.0
+            - 8.3 (default): use PHP 8.3
+            - 8.2: use PHP 8.2
 
-    -t <10|11>
+    -t <13>
         Specifies the TYPO3 version to be used
-            - 10 (default): use TYPO3 10
-            - 11: use TYPO3 11
+            - 13 (default): use TYPO3 13
 
     -e "<phpunit options>"
         Only with -s functional|unit
@@ -101,16 +100,16 @@ Options:
         Show this help.
 
 Examples:
-    # Run unit tests using PHP 7.4
+    # Run unit tests using PHP 8.2
     ./Build/Scripts/runTests.sh
 
-    # Run unit tests using PHP 7.3
-    ./Build/Scripts/runTests.sh -p 7.3
+    # Run unit tests using PHP 8.3
+    ./Build/Scripts/runTests.sh -p 8.3
 EOF
 
 # Test if docker-compose exists, else exit out with error
-if ! type "docker-compose" > /dev/null; then
-    echo "This script relies on docker and docker-compose. Please install" >&2
+if ! type "docker" > /dev/null; then
+    echo "This script relies on docker and docker compose. Please install" >&2
     exit 1
 fi
 
@@ -131,8 +130,8 @@ else
 fi
 TEST_SUITE="unit"
 DBMS="mariadb"
-PHP_VERSION="7.4"
-TYPO3_VERSION="10"
+PHP_VERSION="8.3"
+TYPO3_VERSION="13"
 PHP_XDEBUG_ON=0
 PHP_XDEBUG_PORT=9003
 EXTRA_TEST_OPTIONS=""
@@ -214,41 +213,41 @@ fi
 case ${TEST_SUITE} in
     composerInstall)
         setUpDockerComposeDotEnv
-        docker-compose run composer_install
+        docker compose run composer_install
         SUITE_EXIT_CODE=$?
-        docker-compose down
+        docker compose down
         ;;
     composerInstallMax)
         setUpDockerComposeDotEnv
-        docker-compose run composer_install_max
+        docker compose run composer_install_max
         SUITE_EXIT_CODE=$?
-        docker-compose down
+        docker compose down
         ;;
     composerInstallMin)
         setUpDockerComposeDotEnv
-        docker-compose run composer_install_min
+        docker compose run composer_install_min
         SUITE_EXIT_CODE=$?
-        docker-compose down
+        docker compose down
         ;;
     composerValidate)
         setUpDockerComposeDotEnv
-        docker-compose run composer_validate
+        docker compose run composer_validate
         SUITE_EXIT_CODE=$?
-        docker-compose down
+        docker compose down
         ;;
     functional)
         setUpDockerComposeDotEnv
         case ${DBMS} in
             mariadb)
-                docker-compose run functional_mariadb10
+                docker compose run functional_mariadb10
                 SUITE_EXIT_CODE=$?
                 ;;
             mssql)
-                docker-compose run functional_mssql2019latest
+                docker compose run functional_mssql2019latest
                 SUITE_EXIT_CODE=$?
                 ;;
             postgres)
-                docker-compose run functional_postgres10
+                docker compose run functional_postgres10
                 SUITE_EXIT_CODE=$?
                 ;;
             sqlite)
@@ -257,7 +256,7 @@ case ${TEST_SUITE} in
                 # root if docker creates it. Thank you, docker. We create the path beforehand
                 # to avoid permission issues.
                 mkdir -p ${ROOT_DIR}/.Build/Web/typo3temp/var/tests/functional-sqlite-dbs/
-                docker-compose run functional_sqlite
+                docker compose run functional_sqlite
                 SUITE_EXIT_CODE=$?
                 ;;
             *)
@@ -266,25 +265,25 @@ case ${TEST_SUITE} in
                 echo "${HELP}" >&2
                 exit 1
         esac
-        docker-compose down
+        docker compose down
         ;;
     lintPhp)
         setUpDockerComposeDotEnv
-        docker-compose run lint_php
+        docker compose run lint_php
         SUITE_EXIT_CODE=$?
-        docker-compose down
+        docker compose down
         ;;
     lintEditorconfig)
             setUpDockerComposeDotEnv
-            docker-compose run lint_editorconfig
+            docker compose run lint_editorconfig
             SUITE_EXIT_CODE=$?
-            docker-compose down
+            docker compose down
             ;;
     unit)
         setUpDockerComposeDotEnv
-        docker-compose run unit
+        docker compose run unit
         SUITE_EXIT_CODE=$?
-        docker-compose down
+        docker compose down
         ;;
     update)
         # pull typo3/core-testing-*:latest versions of those ones that exist locally

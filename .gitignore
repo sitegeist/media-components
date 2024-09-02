@@ -2,4 +2,5 @@
 composer.lock
 /var
 /Build/Testing/.phpunit.result.cache
+/Build/Testing/.phpunit.cache/
 /Build/testing-docker/.env
