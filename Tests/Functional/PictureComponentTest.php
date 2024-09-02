@@ -2,12 +2,15 @@
 
 namespace Sitegeist\MediaComponents\Tests\Functional;
 
-class PictureComponentTest extends AbstractComponentTest
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
+
+class PictureComponentTest extends AbstractComponentTestCase
 {
     /**
      * @return string[][]
      */
-    public function pictureComponentTestProvider(): array
+    public static function pictureComponentTestProvider(): array
     {
         return [
             'Only mandatory data provided' => [
@@ -31,10 +34,8 @@ class PictureComponentTest extends AbstractComponentTest
         ];
     }
 
-    /**
-     * @test
-     * @dataProvider pictureComponentTestProvider
-     */
+    #[Test]
+    #[DataProvider('pictureComponentTestProvider')]
     public function pictureComponentTest(string $expectedResult, string $input) {
         $view = $this->getTestView($input);
         $result = $this->cleanUpTestResult($view->render());

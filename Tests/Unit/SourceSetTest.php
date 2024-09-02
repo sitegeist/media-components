@@ -2,13 +2,12 @@
 
 namespace Sitegeist\MediaComponents\Tests\Unit;
 
+use PHPUnit\Framework\Attributes\Test;
 use Sitegeist\MediaComponents\Domain\Model\SourceSet;
 
 class SourceSetTest extends \TYPO3\TestingFramework\Core\Unit\UnitTestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function testFromArray()
     {
         $sourceSet = SourceSet::fromArray(['10w', '20w', '30w']);
@@ -17,9 +16,7 @@ class SourceSetTest extends \TYPO3\TestingFramework\Core\Unit\UnitTestCase
         $this->assertEquals(['10w', '20w', '30w'], $sourceSet->getSrcset());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function testFromInteger()
     {
         $sourceSet = SourceSet::fromInteger(200);
@@ -28,9 +25,7 @@ class SourceSetTest extends \TYPO3\TestingFramework\Core\Unit\UnitTestCase
         $this->assertEquals([200], $sourceSet->getSrcset());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function testFromString()
     {
         $sourceSet = SourceSet::fromString('10w,20w,30w');

@@ -2,12 +2,15 @@
 
 namespace Sitegeist\MediaComponents\Tests\Functional;
 
-class VideoComponentTest extends AbstractComponentTest
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
+
+class VideoComponentTest extends AbstractComponentTestCase
 {
     /**
      * @return string[][]
      */
-    public function videoComponentTestProvider(): array
+    public static function videoComponentTestProvider(): array
     {
         return [
             'Only mandatory data provided' => [
@@ -35,10 +38,8 @@ class VideoComponentTest extends AbstractComponentTest
         ];
     }
 
-    /**
-     * @test
-     * @dataProvider videoComponentTestProvider
-     */
+    #[Test]
+    #[DataProvider('videoComponentTestProvider')]
     public function videoComponentTestMinimal(string $expectedResult, string $input) {
         $view = $this->getTestView($input);
         $result = $this->cleanUpTestResult($view->render());
