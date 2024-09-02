@@ -256,8 +256,8 @@ class ImageSource implements
             }
 
             $processingInstructions = [
-                'width' => round( $originalImage->getWidth() * $this->getScale() ),
-                'height' => round( $originalImage->getHeight() * $this->getScale() ),
+                'width' => round($originalImage->getWidth() * $this->getScale()),
+                'height' => round($originalImage->getHeight() * $this->getScale()),
                 'fileExtension' => $this->getFormat(),
                 'crop' => $crop
             ];
