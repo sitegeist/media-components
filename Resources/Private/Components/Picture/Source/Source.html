@@ -31,7 +31,7 @@
             type="{croppedImage.format}"
         />
         <f:if condition="{preload}">
-            <mvh:preload
+            <f:asset.css
                 identifier="{src.publicUrl}"
                 type="{src.originalImage.file.properties.mime_type}"
                 rel="preload"
