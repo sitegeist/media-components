@@ -47,6 +47,7 @@
     "config": {
         "vendor-dir": ".Build/vendor",
         "bin-dir": ".Build/bin",
+        "lock": false,
         "allow-plugins": {
             "typo3/cms-composer-installers": true,
             "typo3/class-alias-loader": true
@@ -54,10 +55,8 @@
     },
     "extra": {
         "typo3/cms": {
-            "cms-package-dir": "{$vendor-dir}/typo3/cms",
-            "app-dir": ".Build",
-            "web-dir": ".Build/Web",
-            "extension-key": "media_components"
+            "extension-key": "media_components",
+            "web-dir": ".Build/public"
         }
     },
     "scripts": {
@@ -65,8 +64,8 @@
             "@lint:php",
             "@lint:editorconfig"
         ],
-        "lint:php": "Build/Scripts/runTests.sh -s lintPhp",
-        "lint:editorconfig": "Build/Scripts/runTests.sh -s lintEditorconfig",
+        "lint:php": "phpcs --standard=PSR2 --extensions=php --exclude=Generic.Files.LineLength --ignore=.Build,.cache,Tests,ext_emconf.php .",
+        "lint:editorconfig": "ec -exclude .Build .",
         "test": [
             "@test:unit",
             "@test:functional"
