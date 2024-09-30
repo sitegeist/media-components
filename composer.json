@@ -24,10 +24,10 @@
     },
     "require": {
         "php": "^8.2",
-        "sitegeist/fluid-components": "^3.7.0",
-        "typo3fluid/fluid": "<=2.14.1",
-        "sitegeist/fluid-tagbuilder": "^1",
-        "typo3/cms-core": "13.2.*"
+        "sitegeist/fluid-components": "^3.7",
+        "typo3fluid/fluid": "^4.0",
+        "sitegeist/fluid-tagbuilder": "^1 || dev-main",
+        "typo3/cms-core": "^13.3 || dev-main"
     },
     "require-dev": {
         "typo3/testing-framework": "^8.2",

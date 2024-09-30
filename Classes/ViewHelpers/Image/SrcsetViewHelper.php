@@ -7,13 +7,10 @@ use Sitegeist\MediaComponents\Domain\Model\ImageSource;
 use Sitegeist\MediaComponents\Domain\Model\SourceSet;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Service\ImageService;
-use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
-use TYPO3Fluid\Fluid\Core\ViewHelper\Traits\CompileWithContentArgumentAndRenderStatic;
+use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 
-class SrcsetViewHelper extends \TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper
+class SrcsetViewHelper extends AbstractViewHelper
 {
-    use CompileWithContentArgumentAndRenderStatic;
-
     public function initializeArguments(): void
     {
         $this->registerArgument('imageSource', ImageSource::class, 'Image source (if not provided via content)');
@@ -21,17 +18,13 @@ class SrcsetViewHelper extends \TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHel
         $this->registerArgument('base', ImageSource::class, 'Base image for pixel density calculations');
     }
 
-    public static function renderStatic(
-        array $arguments,
-        \Closure $renderChildrenClosure,
-        RenderingContextInterface $renderingContext
-    ): string {
-        if (!$arguments['srcset'] instanceof SourceSet) {
+    public function render(): string
+    {
+        if (!$this->arguments['srcset'] instanceof SourceSet) {
             return '';
         }
-
-        $arguments['imageSource'] ??= $renderChildrenClosure();
-        return self::generateSrcsetString($arguments['imageSource'], $arguments['srcset'], $arguments['base']);
+        $this->arguments['imageSource'] ??= $this->renderChildren();
+        return self::generateSrcsetString($this->arguments['imageSource'], $this->arguments['srcset'], $this->arguments['base']);
     }
 
     public static function generateSrcsetString(ImageSource $imageSource, SourceSet $srcset, ImageSource $base = null): string
