@@ -28,7 +28,7 @@ abstract class AbstractComponentTestCase extends FunctionalTestCase
 
     protected function cleanUpTestResult($result = '')
     {
-        return trim((string) preg_replace('/\\>\\s+\\</', '><', str_replace("\n", '', (string)$result)));
+        return trim((string) preg_replace('/\\>\\s+\\</', '><', str_replace("\n", '', (string) $result)));
     }
 
     protected function getTestView($html = '')

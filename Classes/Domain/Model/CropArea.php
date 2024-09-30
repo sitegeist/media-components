@@ -54,10 +54,10 @@ class CropArea implements ConstructibleFromArray, ConstructibleFromFloat, Constr
 
         if (substr_count($ratio, ':') === 1) {
             [$x, $y] = GeneralUtility::trimExplode(':', $ratio);
-            $area = $area->applyRatioRestriction(new Ratio('', '', (float)$x/(float)$y));
+            $area = $area->applyRatioRestriction(new Ratio('', '', (float) $x / (float) $y));
         } elseif (substr_count($ratio, '/') === 1) {
             [$x, $y] = GeneralUtility::trimExplode('/', $ratio);
-            $area = $area->applyRatioRestriction(new Ratio('', '', (float)$x/(float)$y));
+            $area = $area->applyRatioRestriction(new Ratio('', '', (float) $x / (float) $y));
         }
 
         return new static($area);

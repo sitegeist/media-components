@@ -25,7 +25,7 @@
         <ft:picture :spaceless="1">
             <f:for each="{sources}" as="source">
                 <mc:picture.source
-                    src="{f:if(condition: source, then: source, else: src)}"
+                    src="{f:if(condition: source.originalImage, then: source, else: src)}"
                     format="{f:if(condition: source.format, then: source.format, else: src.format)}"
                     crop="{f:if(condition: source.crop, then: source.crop, else: src.crop)}"
                     srcset="{source.srcset}"

@@ -6,18 +6,20 @@ namespace Sitegeist\MediaComponents\Domain\Model;
 use Sitegeist\MediaComponents\Domain\Model\CropArea;
 use Sitegeist\MediaComponents\Domain\Model\SourceSet;
 use Sitegeist\MediaComponents\Interfaces\ConstructibleFromImage;
-use SMS\FluidComponents\Domain\Model\FalImage;
+use SMS\FluidComponents\Domain\Model\FalFile;
 use SMS\FluidComponents\Domain\Model\Image;
 use SMS\FluidComponents\Interfaces\ConstructibleFromArray;
 use SMS\FluidComponents\Interfaces\ConstructibleFromExtbaseFile;
 use SMS\FluidComponents\Interfaces\ConstructibleFromFileInterface;
 use SMS\FluidComponents\Interfaces\ConstructibleFromInteger;
 use SMS\FluidComponents\Interfaces\ConstructibleFromString;
+use SMS\FluidComponents\Interfaces\ImageWithCropVariants;
+use SMS\FluidComponents\Interfaces\ImageWithDimensions;
+use SMS\FluidComponents\Interfaces\ProcessableImage;
 use SMS\FluidComponents\Utility\ComponentArgumentConverter;
 use TYPO3\CMS\Core\Resource\FileInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Domain\Model\FileReference;
-use TYPO3\CMS\Extbase\Service\ImageService;
 
 class ImageSource implements
     ConstructibleFromArray,
@@ -31,8 +33,6 @@ class ImageSource implements
      * Image with applied modifications
      */
     protected ?Image $image = null;
-
-    protected ?ImageService $imageService = null;
 
     protected float $scale = 1.0;
 
@@ -49,7 +49,6 @@ class ImageSource implements
     public function __construct(
         protected ?Image $originalImage = null
     ) {
-        $this->imageService = GeneralUtility::makeInstance(ImageService::class);
         $this->setCrop(new CropArea);
     }
 
@@ -58,7 +57,7 @@ class ImageSource implements
         $argumentConverter = GeneralUtility::makeInstance(ComponentArgumentConverter::class);
 
         try {
-            $image = $argumentConverter->convertValueToType($value['originalImage'], Image::class);
+            $image = $argumentConverter->convertValueToType($value['originalImage'] ?? $value, Image::class);
         } catch (\SMS\FluidComponents\Exception\InvalidArgumentException) {
             // TODO better error handling here:
             // Image is not required, but invalid combination of parameters should
@@ -76,20 +75,23 @@ class ImageSource implements
         if (isset($value['media'])) {
             $imageSource->setMedia((string) $value['media']);
         }
-        if (isset($value['scale'])) {
+        if (isset($value['sizes'])) {
             $imageSource->setSizes((string) $value['sizes']);
         }
 
-        if (isset($value['crop']) || isset($value['srcset'])) {
-            $argumentConverter = GeneralUtility::makeInstance(ComponentArgumentConverter::class);
+        if (isset($value['crop'])) {
+            $imageSource->setCrop(
+                $argumentConverter->convertValueToType($value['crop'], CropArea::class)
+            );
+        } elseif ($image instanceof ImageWithCropVariants) {
+            $cropVariant = (isset($value['cropVariant']))
+                ? $image->getCropVariant($value['cropVariant'])
+                : $image->getDefaultCrop();
+            $imageSource->setCrop(new CropArea($cropVariant));
+        }
 
-            if (isset($value['crop'])) {
-                $imageSource->setCrop($argumentConverter->convertValueToType($value['crop'], CropArea::class));
-            }
-
-            if (isset($value['srcset'])) {
-                $imageSource->setSrcset($argumentConverter->convertValueToType($value['srcset'], SourceSet::class));
-            }
+        if (isset($value['srcset'])) {
+            $imageSource->setSrcset($argumentConverter->convertValueToType($value['srcset'], SourceSet::class));
         }
 
         return $imageSource;
@@ -164,6 +166,40 @@ class ImageSource implements
         return $this;
     }
 
+    public function getCroppedWidth(): ?int
+    {
+        if (!($this->originalImage instanceof ImageWithDimensions)) {
+            return null;
+        }
+
+        if ($this->crop->getArea()->isEmpty()) {
+            $this->originalImage->getWidth();
+        }
+
+        if ($this->getOriginalImage() instanceof FalFile) {
+            return (int) round($this->crop->getArea()->makeAbsoluteBasedOnFile($this->getOriginalImage()->getFile())->getWidth());
+        }
+
+        return (int) round($this->crop->getArea()->getWidth() * $this->originalImage->getWidth());
+    }
+
+    public function getCroppedHeight(): ?int
+    {
+        if (!($this->originalImage instanceof ImageWithDimensions)) {
+            return null;
+        }
+
+        if ($this->crop->getArea()->isEmpty()) {
+            $this->originalImage->getHeight();
+        }
+
+        if ($this->getOriginalImage() instanceof FalFile) {
+            return (int) round($this->crop->getArea()->makeAbsoluteBasedOnFile($this->getOriginalImage()->getFile())->getHeight());
+        }
+
+        return (int) round($this->crop->getArea()->getHeight() * $this->originalImage->getHeight());
+    }
+
     public function getImage(): Image
     {
         // TODO throw exception if image is not defined
@@ -193,12 +229,14 @@ class ImageSource implements
 
     public function getHeight(): ?int
     {
-        return $this->getImage()->getHeight();
+        $image = $this->getImage();
+        return ($image instanceof ImageWithDimensions) ? $image->getHeight() : null;
     }
 
     public function getWidth(): ?int
     {
-        return $this->getImage()->getWidth();
+        $image = $this->getImage();
+        return ($image instanceof ImageWithDimensions) ? $image->getWidth() : null;
     }
 
     public function getMedia(): ?string
@@ -244,25 +282,17 @@ class ImageSource implements
 
     protected function processImage(): void
     {
-        $originalImage = $this->getOriginalImage();
+        // TODO implement runtime cache
+        $this->image = null;
 
-        if ($originalImage) {
-            $crop = null;
-            if ($this->getCrop()) {
-                $cropArea = $this->getCrop()->getArea();
-                if (!$cropArea->isEmpty()) {
-                    $crop = $cropArea->makeAbsoluteBasedOnFile($originalImage->getFile());
-                }
-            }
-
-            $processingInstructions = [
-                'width' => round($originalImage->getWidth() * $this->getScale()),
-                'height' => round($originalImage->getHeight() * $this->getScale()),
-                'fileExtension' => $this->getFormat(),
-                'crop' => $crop
-            ];
-
-            $this->image = new FalImage($this->imageService->applyProcessingInstructions($originalImage->getFile(), $processingInstructions));
+        $original = $this->getOriginalImage();
+        if ($original instanceof ProcessableImage && $original instanceof ImageWithDimensions) {
+            $this->image = $original->process(
+                (int) round($this->getCroppedWidth() * $this->getScale()),
+                (int) round($this->getCroppedHeight() * $this->getScale()),
+                $this->getFormat(),
+                $this->getCrop()->getArea(),
+            );
         }
     }
 }
