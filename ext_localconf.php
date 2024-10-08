@@ -12,6 +12,9 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 defined('TYPO3') or die();
 
+$GLOBALS['TYPO3_CONF_VARS']['SYS']['fluid']['namespaces']['fc'] ??= [];
+$GLOBALS['TYPO3_CONF_VARS']['SYS']['fluid']['namespaces']['fc'][] = 'Sitegeist\\MediaComponents\\Components';
+
 $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['fluid_components']['namespaces']['Sitegeist\\MediaComponents\\Components'] =
     ExtensionManagementUtility::extPath('media_components', 'Resources/Private/Components');
 
