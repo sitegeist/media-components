@@ -24,7 +24,7 @@
     },
     "require": {
         "php": "^8.2",
-        "sitegeist/fluid-components": "^3.7",
+        "sitegeist/fluid-components": "^3.8.1",
         "typo3fluid/fluid": "^4.0",
         "sitegeist/fluid-tagbuilder": "^1 || dev-main",
         "typo3/cms-core": "^13.3 || dev-main"
