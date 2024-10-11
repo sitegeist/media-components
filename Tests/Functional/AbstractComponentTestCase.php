@@ -3,8 +3,12 @@
 namespace Sitegeist\MediaComponents\Tests\Functional;
 
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Fluid\View\StandaloneView;
+use TYPO3\CMS\Fluid\Core\Rendering\RenderingContextFactory;
 use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
+use TYPO3Fluid\Fluid\View\TemplateView;
+use TYPO3\CMS\Core\Http\ServerRequest;
+use TYPO3\CMS\Extbase\Mvc\ExtbaseRequestParameters;
+use TYPO3\CMS\Extbase\Mvc\Request;
 
 abstract class AbstractComponentTestCase extends FunctionalTestCase
 {
@@ -33,13 +37,21 @@ abstract class AbstractComponentTestCase extends FunctionalTestCase
 
     protected function getTestView($html = '')
     {
-        $view = GeneralUtility::makeInstance(StandaloneView::class);
-        $view->setTemplateSource('<html
-            xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
-            xmlns:mc="http://typo3.org/ns/Sitegeist/MediaComponents/Components"
-            xmlns:mvh="http://typo3.org/ns/Sitegeist/MediaComponents/ViewHelpers"
-            data-namespace-typo3-fluid="true"
-            >' . $html);
+        $view = new TemplateView();
+        $view->setRenderingContext(
+            GeneralUtility::makeInstance(RenderingContextFactory::class)->create(
+                [],
+                new Request(
+                    (new ServerRequest)->withAttribute(
+                        'extbase',
+                        new ExtbaseRequestParameters
+                    )
+                )
+            )
+        );
+
+        $view->getRenderingContext()->getViewHelperResolver()->addNamespace('mvh', 'Sitegeist\\MediaComponents\\ViewHelpers');
+        $view->getRenderingContext()->getTemplatePaths()->setTemplateSource($html);
 
         return $view;
     }
