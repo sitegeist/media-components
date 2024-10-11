@@ -278,7 +278,7 @@ ROOT_DIR="${PWD}"
 
 # Option defaults
 TEST_SUITE="unit"
-CORE_VERSION="13.2"
+CORE_VERSION="13.3"
 DBMS="sqlite"
 DBMS_VERSION=""
 PHP_VERSION="8.3"
