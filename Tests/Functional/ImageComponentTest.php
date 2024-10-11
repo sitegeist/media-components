@@ -15,11 +15,11 @@ class ImageComponentTest extends AbstractComponentTestCase
         return [
             'Only mandatory data provided' => [
                 '<img src="fileadmin/test_files/image.png" height="3840" width="3840" />',
-                '<mc:image src="5" />'
+                '<fc:image src="5" />'
             ],
             'All data provided' => [
                 '<img src="fileadmin/_processed_/3/8/csm_image_3c73179ad3.jpg" srcset="fileadmin/_processed_/3/8/csm_image_2fe057fbe4.jpg 400w, fileadmin/_processed_/3/8/csm_image_00a46099c0.jpg 800w, fileadmin/_processed_/3/8/csm_image_622ce9e0c0.jpg 1200w" height="100" width="100" alt="Alt text" title="Title text" loading="lazy" sizes="(min-width: 400px) 400px, (min-width: 800px) 800px, (min-width:1200px) 1200px, 100vw" />',
-                '<mc:image
+                '<fc:image
                     src="5"
                     width="500"
                     height="100"

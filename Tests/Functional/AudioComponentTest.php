@@ -15,11 +15,11 @@ class AudioComponentTest extends AbstractComponentTestCase
         return [
             'Only mandatory data provided' => [
                 '<audio controls="controls" preload="auto"><source src="fileadmin/test_files/audio.mp3" type="audio/mpeg" /><source src="fileadmin/test_files/audio.ogg" type="audio/ogg" /><source src="fileadmin/test_files/audio.ogg" type="audio/ogg" /></audio>',
-                '<mc:audio sources="{0: 1, 1: 2, 3: 2}" />'
+                '<fc:audio sources="{0: 1, 1: 2, 3: 2}" />'
             ],
             'All data provided' => [
                 '<audio autoplay="autoplay" controls="controls" loop="loop" muted="muted" preload="metadata" crossorigin="anonymous"><source src="fileadmin/test_files/audio.mp3" type="audio/mpeg" /><source src="fileadmin/test_files/audio.ogg" type="audio/ogg" /><source src="fileadmin/test_files/audio.ogg" type="audio/ogg" />                        Fallback        </audio>',
-                '<mc:audio
+                '<fc:audio
                     sources="{0: 1, 1: 2, 3: 2}"
                     autoplay="true"
                     controls="true"

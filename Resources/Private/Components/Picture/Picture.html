@@ -2,7 +2,6 @@
     xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
     xmlns:fc="http://typo3.org/ns/SMS/FluidComponents/ViewHelpers"
     xmlns:ft="http://typo3.org/ns/Sitegeist/FluidTagbuilder/ViewHelpers"
-    xmlns:mc="http://typo3.org/ns/Sitegeist/MediaComponents/Components"
     data-namespace-typo3-fluid="true"
 >
 
@@ -24,7 +23,7 @@
     <fc:renderer>
         <ft:picture :spaceless="1">
             <f:for each="{sources}" as="source">
-                <mc:picture.source
+                <fc:picture.source
                     src="{f:if(condition: source.originalImage, then: source, else: src)}"
                     format="{f:if(condition: source.format, then: source.format, else: src.format)}"
                     crop="{f:if(condition: source.crop, then: source.crop, else: src.crop)}"
@@ -34,7 +33,7 @@
                     preload="{preload}"
                 />
             </f:for>
-            <mc:image
+            <fc:image
                 src="{src}"
                 height="{height}"
                 width="{width}"

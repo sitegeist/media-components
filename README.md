@@ -20,7 +20,7 @@ We use the public namespace from fluid-components.
 ```html
 <fc:image src="{width:200, height:100}" />
 
-<mc:image
+<fc:image
     src="5"
     width="500"
     height="100"
@@ -38,7 +38,7 @@ We use the public namespace from fluid-components.
 
 ### Pictures
 ```html
-<mc:picture
+<fc:picture
     src="{originalImage: {fileUid: 5}, srcset: \'400,800,1200\'}"
     sources="{desktop: {originalImage: {fileUid: 5}, srcset: \'1000, 1200, 1400, 1600, 1800, 2000\'}}"
     width="500"
@@ -53,7 +53,7 @@ We use the public namespace from fluid-components.
 
 ### Video
 ```html
-<mc:video
+<fc:video
     sources="{0: 7}"
     tracks="{0: 8}"
     width="800"
@@ -72,7 +72,7 @@ We use the public namespace from fluid-components.
 
 ### Audio
 ```html
-<mc:audio
+<fc:audio
     sources="{0: 1, 1: 2, 3: 2}"
     autoplay="true"
     controls="true"
