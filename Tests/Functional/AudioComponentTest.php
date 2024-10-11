@@ -2,12 +2,15 @@
 
 namespace Sitegeist\MediaComponents\Tests\Functional;
 
-class AudioComponentTest extends AbstractComponentTest
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
+
+class AudioComponentTest extends AbstractComponentTestCase
 {
     /**
      * @return string[][]
      */
-    public function audioComponentTestProvider(): array
+    public static function audioComponentTestProvider(): array
     {
         return [
             'Only mandatory data provided' => [
@@ -30,11 +33,9 @@ class AudioComponentTest extends AbstractComponentTest
         ];
     }
 
-    /**
-     * @test
-     * @dataProvider audioComponentTestProvider
-     */
-    public function audioComponentTest(string $expectedResult, string $input)
+    #[Test]
+    #[DataProvider('audioComponentTestProvider')]
+    public function audioComponentTest(string $expectedResult, string $input): void
     {
         $view = $this->getTestView($input);
         $result = $this->cleanUpTestResult($view->render());

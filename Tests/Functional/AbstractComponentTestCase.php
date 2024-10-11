@@ -6,7 +6,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Fluid\View\StandaloneView;
 use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 
-abstract class AbstractComponentTest extends FunctionalTestCase
+abstract class AbstractComponentTestCase extends FunctionalTestCase
 {
     protected bool $initializeDatabase = true;
 
@@ -16,19 +16,19 @@ abstract class AbstractComponentTest extends FunctionalTestCase
     ];
 
     protected array $pathsToLinkInTestInstance = [
-        'typo3_src/typo3conf/ext/media_components/Tests/Functional/Fixtures/Files' => 'fileadmin/test_files',
+        'typo3conf/ext/media_components/Tests/Functional/Fixtures/Files' => 'fileadmin/test_files',
     ];
 
     public function setUp(): void
     {
         parent::setUp();
-        $this->setUpBackendUserFromFixture(1);
         $this->importCSVDataSet(__DIR__ . '/Fixtures/Databases/test_files.csv');
+        $this->setUpBackendUser(1);
     }
 
     protected function cleanUpTestResult($result = '')
     {
-        return trim(preg_replace('/\\>\\s+\\</', '><', str_replace("\n", '', (string)$result)));
+        return trim((string) preg_replace('/\\>\\s+\\</', '><', str_replace("\n", '', (string) $result)));
     }
 
     protected function getTestView($html = '')

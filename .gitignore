@@ -1,5 +1,4 @@
 .Build
-composer.lock
 /var
-/Build/Testing/.phpunit.result.cache
-/Build/testing-docker/.env
+.cache
+/Build/phpunit/.phpunit.cache/

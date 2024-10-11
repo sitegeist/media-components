@@ -14,7 +14,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class CropArea implements ConstructibleFromArray, ConstructibleFromFloat, ConstructibleFromInteger, ConstructibleFromString, ConstructibleFromArea
 {
-    protected $area;
+    protected ?Area $area = null;
 
     public function __construct(Area $area = null)
     {
@@ -26,38 +26,38 @@ class CropArea implements ConstructibleFromArray, ConstructibleFromFloat, Constr
         return $this->area;
     }
 
-    public static function fromArea(Area $area)
+    public static function fromArea(Area $area): static
     {
         return new static($area);
     }
 
-    public static function fromArray(array $config)
+    public static function fromArray(array $config): ?object
     {
         return new static(Area::createFromConfiguration($config));
     }
 
-    public static function fromFloat(float $ratio)
+    public static function fromFloat(float $ratio): static
     {
         $ratio = new Ratio('', '', $ratio);
         return new static(Area::createEmpty()->applyRatioRestriction($ratio));
     }
 
-    public static function fromInteger(int $ratio)
+    public static function fromInteger(int $ratio): object
     {
         $ratio = new Ratio('', '', $ratio);
         return new static(Area::createEmpty()->applyRatioRestriction($ratio));
     }
 
-    public static function fromString(string $ratio)
+    public static function fromString(string $ratio): static
     {
         $area = Area::createEmpty();
 
         if (substr_count($ratio, ':') === 1) {
-            list($x, $y) = GeneralUtility::trimExplode(':', $ratio);
-            $area = $area->applyRatioRestriction(new Ratio('', '', (float)$x/(float)$y));
+            [$x, $y] = GeneralUtility::trimExplode(':', $ratio);
+            $area = $area->applyRatioRestriction(new Ratio('', '', (float) $x / (float) $y));
         } elseif (substr_count($ratio, '/') === 1) {
-            list($x, $y) = GeneralUtility::trimExplode('/', $ratio);
-            $area = $area->applyRatioRestriction(new Ratio('', '', (float)$x/(float)$y));
+            [$x, $y] = GeneralUtility::trimExplode('/', $ratio);
+            $area = $area->applyRatioRestriction(new Ratio('', '', (float) $x / (float) $y));
         }
 
         return new static($area);

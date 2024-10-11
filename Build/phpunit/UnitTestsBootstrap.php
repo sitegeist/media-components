@@ -12,7 +12,7 @@
  * The TYPO3 project - inspiring people to share!
  */
 
-call_user_func(function () {
+call_user_func(function (): void {
     $testbase = new \TYPO3\TestingFramework\Core\Testbase();
 
     // These if's are for core testing (package typo3/cms) only. cms-composer-installer does

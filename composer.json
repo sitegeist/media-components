@@ -7,22 +7,30 @@
     "keywords": ["typo3", "typo3-extension", "fluid", "typo3-fluid", "components", "html", "template", "media", "image", "responsive images", "video", "audio"],
     "authors": [
         {
+            "name": "Benjamin Tammling",
+            "email": "benjamin.tammling@sitegeist.de"
+        },
+        {
+            "name": "Ulrich Mathes",
+            "email": "mathes@sitegeist.de"
+        },
+        {
             "name": "Simon Praetorius",
-            "email": "praetorius@sitegeist.de"
+            "email": "moin@praetorius.me"
         }
     ],
     "support": {
         "issues": "https://github.com/sitegeist/media-components/issues"
     },
     "require": {
-        "php": ">=7.4.0 <=8.2.99",
-        "sitegeist/fluid-components": "^3.3.0",
-        "typo3fluid/fluid": "^2",
-        "sitegeist/fluid-tagbuilder": "^1",
-        "typo3/cms-core": "^11.4 || ^12.0"
+        "php": "^8.2",
+        "sitegeist/fluid-components": "^3.8.1",
+        "typo3fluid/fluid": "^4.0",
+        "sitegeist/fluid-tagbuilder": "^1 || dev-main",
+        "typo3/cms-core": "^13.3 || dev-main"
     },
     "require-dev": {
-        "typo3/testing-framework": "^6.0 || 7.x-dev",
+        "typo3/testing-framework": "^8.2",
         "squizlabs/php_codesniffer": "^3.0",
         "editorconfig-checker/editorconfig-checker": "^10.0"
     },
@@ -39,6 +47,7 @@
     "config": {
         "vendor-dir": ".Build/vendor",
         "bin-dir": ".Build/bin",
+        "lock": false,
         "allow-plugins": {
             "typo3/cms-composer-installers": true,
             "typo3/class-alias-loader": true
@@ -46,27 +55,26 @@
     },
     "extra": {
         "typo3/cms": {
-            "cms-package-dir": "{$vendor-dir}/typo3/cms",
-            "app-dir": ".Build",
-            "web-dir": ".Build/Web",
-            "extension-key": "media_components"
+            "extension-key": "media_components",
+            "web-dir": ".Build/public"
         }
     },
     "scripts": {
-        "post-autoload-dump": [
-            "TYPO3\\TestingFramework\\Composer\\ExtensionTestEnvironment::prepare"
-        ],
         "lint": [
             "@lint:php",
             "@lint:editorconfig"
         ],
-        "lint:php": "Build/Scripts/runTests.sh -s lintPhp",
-        "lint:editorconfig": "Build/Scripts/runTests.sh -s lintEditorconfig",
+        "lint:php": "phpcs --standard=PSR2 --extensions=php --exclude=Generic.Files.LineLength --ignore=.Build,.cache,Tests,ext_emconf.php .",
+        "lint:editorconfig": "ec -exclude .Build .",
         "test": [
             "@test:unit",
             "@test:functional"
         ],
         "test:unit": "Build/Scripts/runTests.sh",
-        "test:functional": "Build/Scripts/runTests.sh -s functional"
+        "test:functional": "Build/Scripts/runTests.sh -s functional",
+        "prepare-release": [
+            "sed -i'' -e \"s/'version' => ''/'version' => '$(echo ${GITHUB_REF#refs/tags/} | sed 's/v//')'/\" ext_emconf.php",
+            "rm -r .github .ecrc .editorconfig .gitattributes Build Tests"
+        ]
     }
 }

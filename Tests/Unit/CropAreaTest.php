@@ -2,15 +2,14 @@
 
 namespace Sitegeist\MediaComponents\Tests\Unit;
 
+use PHPUnit\Framework\Attributes\Test;
 use Sitegeist\MediaComponents\Domain\Model\CropArea;
 use TYPO3\CMS\Core\Imaging\ImageManipulation\Area;
 
 class CropAreaTest extends \TYPO3\TestingFramework\Core\Unit\UnitTestCase
 {
-    /**
-     * @test
-     */
-    public function testFromArray()
+    #[Test]
+    public function testFromArray(): void
     {
         $cropArea = CropArea::fromArray(['x' => 0, 'y' => 0, 'width' => 1.0, 'height' => 1.0]);
 
@@ -19,10 +18,8 @@ class CropAreaTest extends \TYPO3\TestingFramework\Core\Unit\UnitTestCase
         $this->assertEquals(['x' => 0, 'y' => 0, 'width' => 1.0, 'height' => 1.0], $cropArea->getArea()->asArray());
     }
 
-    /**
-     * @test
-     */
-    public function testFromFloat()
+    #[Test]
+    public function testFromFloat(): void
     {
         $cropArea = CropArea::fromFloat(2.0);
 
@@ -31,10 +28,8 @@ class CropAreaTest extends \TYPO3\TestingFramework\Core\Unit\UnitTestCase
         $this->assertEquals(['x' => 0, 'y' => 0.25, 'width' => 1.0, 'height' => 0.5], $cropArea->getArea()->asArray());
     }
 
-    /**
-     * @test
-     */
-    public function testFromInteger()
+    #[Test]
+    public function testFromInteger(): void
     {
         $cropArea = CropArea::fromInteger(4);
 
@@ -43,10 +38,8 @@ class CropAreaTest extends \TYPO3\TestingFramework\Core\Unit\UnitTestCase
         $this->assertEquals(['x' => 0, 'y' => 0.375, 'width' => 1.0, 'height' => 0.25], $cropArea->getArea()->asArray());
     }
 
-    /**
-     * @test
-     */
-    public function testFromString()
+    #[Test]
+    public function testFromString(): void
     {
         $cropArea = CropArea::fromString('');
 

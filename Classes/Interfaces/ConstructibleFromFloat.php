@@ -11,9 +11,6 @@ interface ConstructibleFromFloat
 {
     /**
      * Creates an instance of the class based on the provided float
-     *
-     * @param float $value
-     * @return object
      */
-    public static function fromFloat(float $value);
+    public static function fromFloat(float $value): object;
 }

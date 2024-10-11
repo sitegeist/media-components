@@ -4,14 +4,12 @@ declare(strict_types=1);
 namespace Sitegeist\MediaComponents\ViewHelpers\Image\Modify;
 
 use Sitegeist\MediaComponents\Domain\Model\ImageSource;
-use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
-use TYPO3Fluid\Fluid\Core\ViewHelper\Traits\CompileWithContentArgumentAndRenderStatic;
+use SMS\FluidComponents\Interfaces\ImageWithDimensions;
+use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 
-class ScaleViewHelper extends \TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper
+class ScaleViewHelper extends AbstractViewHelper
 {
-    use CompileWithContentArgumentAndRenderStatic;
-
-    public function initializeArguments()
+    public function initializeArguments(): void
     {
         $this->registerArgument('imageSource', ImageSource::class, 'Image source (if not provided via content)');
         $this->registerArgument('height', 'integer', 'Desired image height');
@@ -19,24 +17,22 @@ class ScaleViewHelper extends \TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelp
         $this->registerArgument('maxDimensions', 'boolean', 'If true, height and width will be considered maximums', true, false);
     }
 
-    public static function renderStatic(
-        array $arguments,
-        \Closure $renderChildrenClosure,
-        RenderingContextInterface $renderingContext
-    ): ImageSource {
-        $imageSource = $arguments['imageSource'] ?? $renderChildrenClosure();
-
-        if ($arguments['height'] || $arguments['width']) {
-            $heightFactor = $arguments['height'] ? $arguments['height'] / $imageSource->getOriginalImage()->getHeight() : 1;
-            $widthFactor = $arguments['width'] ? $arguments['width'] / $imageSource->getOriginalImage()->getWidth() : 1;
-            $scaleFactor = ($arguments['maxDimensions'])
+    public function render(): ImageSource
+    {
+        $imageSource = $this->arguments['imageSource'] ?? $this->renderChildren();
+        if (!($imageSource->getOriginalImage() instanceof ImageWithDimensions)) {
+            return $imageSource;
+        }
+        if ($this->arguments['height'] || $this->arguments['width']) {
+            $heightFactor = $this->arguments['height'] ? $this->arguments['height'] / $imageSource->getCroppedWidth() : 1;
+            $widthFactor = $this->arguments['width'] ? $this->arguments['width'] / $imageSource->getCroppedHeight() : 1;
+            $scaleFactor = ($this->arguments['maxDimensions'])
                 ? min($heightFactor, $widthFactor)
                 : max($heightFactor, $widthFactor);
 
             $scaledSource = clone $imageSource;
             $scaledSource->setScale($scaleFactor);
         }
-
         return $scaledSource ?? $imageSource;
     }
 }

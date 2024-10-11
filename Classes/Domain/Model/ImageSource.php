@@ -6,18 +6,20 @@ namespace Sitegeist\MediaComponents\Domain\Model;
 use Sitegeist\MediaComponents\Domain\Model\CropArea;
 use Sitegeist\MediaComponents\Domain\Model\SourceSet;
 use Sitegeist\MediaComponents\Interfaces\ConstructibleFromImage;
-use SMS\FluidComponents\Domain\Model\FalImage;
+use SMS\FluidComponents\Domain\Model\FalFile;
 use SMS\FluidComponents\Domain\Model\Image;
 use SMS\FluidComponents\Interfaces\ConstructibleFromArray;
 use SMS\FluidComponents\Interfaces\ConstructibleFromExtbaseFile;
 use SMS\FluidComponents\Interfaces\ConstructibleFromFileInterface;
 use SMS\FluidComponents\Interfaces\ConstructibleFromInteger;
 use SMS\FluidComponents\Interfaces\ConstructibleFromString;
+use SMS\FluidComponents\Interfaces\ImageWithCropVariants;
+use SMS\FluidComponents\Interfaces\ImageWithDimensions;
+use SMS\FluidComponents\Interfaces\ProcessableImage;
 use SMS\FluidComponents\Utility\ComponentArgumentConverter;
 use TYPO3\CMS\Core\Resource\FileInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Domain\Model\FileReference;
-use TYPO3\CMS\Extbase\Service\ImageService;
 
 class ImageSource implements
     ConstructibleFromArray,
@@ -28,60 +30,26 @@ class ImageSource implements
     ConstructibleFromString
 {
     /**
-     * Original image
-     *
-     * @var Image
-     */
-    protected $originalImage;
-
-    /**
      * Image with applied modifications
-     *
-     * @var Image
      */
-    protected $image;
+    protected ?Image $image = null;
 
-    /**
-     * @var float
-     */
-    protected $scale = 1.0;
+    protected float $scale = 1.0;
 
-    /**
-     * @var CropArea
-     */
-    protected $crop;
+    protected ?CropArea $crop = null;
 
-    /**
-     * @var string
-     */
-    protected $format;
+    protected string $format = '';
 
-    /**
-     * @var string
-     */
-    protected $media;
+    protected string $media = '';
 
-    /**
-     * @var SourceSet
-     */
-    protected $srcset;
+    protected ?SourceSet $srcset = null;
 
-    /**
-     * @var string
-     */
-    protected $sizes;
+    protected string $sizes = '';
 
-    /**
-     * @var ImageService
-     */
-    protected $imageService;
-
-    public function __construct(Image $originalImage = null)
-    {
-        $this->imageService = GeneralUtility::makeInstance(ImageService::class);
-        $this
-            ->setOriginalImage($originalImage)
-            ->setCrop(new CropArea);
+    public function __construct(
+        protected ?Image $originalImage = null
+    ) {
+        $this->setCrop(new CropArea);
     }
 
     public static function fromArray(array $value): ImageSource
@@ -89,30 +57,41 @@ class ImageSource implements
         $argumentConverter = GeneralUtility::makeInstance(ComponentArgumentConverter::class);
 
         try {
-            $image = $argumentConverter->convertValueToType($value['originalImage'], Image::class);
-        } catch (\SMS\FluidComponents\Exception\InvalidArgumentException $e) {
+            $image = $argumentConverter->convertValueToType($value['originalImage'] ?? $value, Image::class);
+        } catch (\SMS\FluidComponents\Exception\InvalidArgumentException) {
             // TODO better error handling here:
             // Image is not required, but invalid combination of parameters should
             // be catched
         }
 
         $imageSource = new static($image);
-        $imageSource
-            ->setScale($value['scale'] ?? null)
-            ->setFormat($value['format'] ?? null)
-            ->setMedia($value['media'] ?? null)
-            ->setSizes($value['sizes'] ?? null);
 
-        if ($value['crop'] || $value['srcset']) {
-            $argumentConverter = GeneralUtility::makeInstance(ComponentArgumentConverter::class);
+        if (isset($value['scale'])) {
+            $imageSource->setScale((float) $value['scale']);
+        }
+        if (isset($value['format'])) {
+            $imageSource->setFormat((string) $value['format']);
+        }
+        if (isset($value['media'])) {
+            $imageSource->setMedia((string) $value['media']);
+        }
+        if (isset($value['sizes'])) {
+            $imageSource->setSizes((string) $value['sizes']);
+        }
 
-            if ($value['crop']) {
-                $imageSource->setCrop($argumentConverter->convertValueToType($value['crop'], CropArea::class));
-            }
+        if (isset($value['crop'])) {
+            $imageSource->setCrop(
+                $argumentConverter->convertValueToType($value['crop'], CropArea::class)
+            );
+        } elseif ($image instanceof ImageWithCropVariants) {
+            $cropVariant = (isset($value['cropVariant']))
+                ? $image->getCropVariant($value['cropVariant'])
+                : $image->getDefaultCrop();
+            $imageSource->setCrop(new CropArea($cropVariant));
+        }
 
-            if ($value['srcset']) {
-                $imageSource->setSrcset($argumentConverter->convertValueToType($value['srcset'], SourceSet::class));
-            }
+        if (isset($value['srcset'])) {
+            $imageSource->setSrcset($argumentConverter->convertValueToType($value['srcset'], SourceSet::class));
         }
 
         return $imageSource;
@@ -148,7 +127,7 @@ class ImageSource implements
         return $this->originalImage;
     }
 
-    public function setOriginalImage(?Image $image): self
+    public function setOriginalImage(Image $image): self
     {
         $this->originalImage = $image;
         return $this;
@@ -159,7 +138,7 @@ class ImageSource implements
         return $this->scale;
     }
 
-    public function setScale(?float $scale): self
+    public function setScale(float $scale): self
     {
         $this->scale = $scale;
         return $this;
@@ -170,7 +149,7 @@ class ImageSource implements
         return $this->format;
     }
 
-    public function setFormat(?string $format): self
+    public function setFormat(string $format): self
     {
         $this->format = $format;
         return $this;
@@ -185,6 +164,40 @@ class ImageSource implements
     {
         $this->crop = $crop;
         return $this;
+    }
+
+    public function getCroppedWidth(): ?int
+    {
+        if (!($this->originalImage instanceof ImageWithDimensions)) {
+            return null;
+        }
+
+        if ($this->crop->getArea()->isEmpty()) {
+            $this->originalImage->getWidth();
+        }
+
+        if ($this->getOriginalImage() instanceof FalFile) {
+            return (int) round($this->crop->getArea()->makeAbsoluteBasedOnFile($this->getOriginalImage()->getFile())->getWidth());
+        }
+
+        return (int) round($this->crop->getArea()->getWidth() * $this->originalImage->getWidth());
+    }
+
+    public function getCroppedHeight(): ?int
+    {
+        if (!($this->originalImage instanceof ImageWithDimensions)) {
+            return null;
+        }
+
+        if ($this->crop->getArea()->isEmpty()) {
+            $this->originalImage->getHeight();
+        }
+
+        if ($this->getOriginalImage() instanceof FalFile) {
+            return (int) round($this->crop->getArea()->makeAbsoluteBasedOnFile($this->getOriginalImage()->getFile())->getHeight());
+        }
+
+        return (int) round($this->crop->getArea()->getHeight() * $this->originalImage->getHeight());
     }
 
     public function getImage(): Image
@@ -216,12 +229,14 @@ class ImageSource implements
 
     public function getHeight(): ?int
     {
-        return $this->getImage()->getHeight();
+        $image = $this->getImage();
+        return ($image instanceof ImageWithDimensions) ? $image->getHeight() : null;
     }
 
     public function getWidth(): ?int
     {
-        return $this->getImage()->getWidth();
+        $image = $this->getImage();
+        return ($image instanceof ImageWithDimensions) ? $image->getWidth() : null;
     }
 
     public function getMedia(): ?string
@@ -229,7 +244,7 @@ class ImageSource implements
         return $this->media;
     }
 
-    public function setMedia(?string $media): self
+    public function setMedia(string $media): self
     {
         $this->media = $media;
         return $this;
@@ -240,7 +255,7 @@ class ImageSource implements
         return $this->sizes;
     }
 
-    public function setSizes(?string $sizes): self
+    public function setSizes(string $sizes): self
     {
         $this->sizes = $sizes;
         return $this;
@@ -251,7 +266,7 @@ class ImageSource implements
         return $this->srcset;
     }
 
-    public function setSrcset(?SourceSet $srcset): self
+    public function setSrcset(SourceSet $srcset): self
     {
         $this->srcset = $srcset;
         return $this;
@@ -259,8 +274,6 @@ class ImageSource implements
 
     /**
      * Use public url of image as string representation of image objects
-     *
-     * @return string
      */
     public function __toString(): string
     {
@@ -269,25 +282,17 @@ class ImageSource implements
 
     protected function processImage(): void
     {
-        $originalImage = $this->getOriginalImage();
+        // TODO implement runtime cache
+        $this->image = null;
 
-        if ($originalImage) {
-            $crop = null;
-            if ($this->getCrop()) {
-                $cropArea = $this->getCrop()->getArea();
-                if (!$cropArea->isEmpty()) {
-                    $crop = $cropArea->makeAbsoluteBasedOnFile($originalImage->getFile());
-                }
-            }
-
-            $processingInstructions = [
-                'width' => $originalImage->getWidth() * $this->getScale(),
-                'height' => $originalImage->getHeight() * $this->getScale(),
-                'fileExtension' => $this->getFormat(),
-                'crop' => $crop
-            ];
-
-            $this->image = new FalImage($this->imageService->applyProcessingInstructions($originalImage->getFile(), $processingInstructions));
+        $original = $this->getOriginalImage();
+        if ($original instanceof ProcessableImage && $original instanceof ImageWithDimensions) {
+            $this->image = $original->process(
+                (int) round($this->getCroppedWidth() * $this->getScale()),
+                (int) round($this->getCroppedHeight() * $this->getScale()),
+                $this->getFormat(),
+                $this->getCrop()->getArea(),
+            );
         }
     }
 }

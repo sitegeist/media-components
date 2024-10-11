@@ -5,106 +5,91 @@ on: [push, pull_request]
 jobs:
     lint:
         name: Source code linting
-        runs-on: ubuntu-latest
+        runs-on: ubuntu-24.04
+        strategy:
+            max-parallel: 2
+            matrix:
+                php-versions: ['8.2']
+                typo3-versions: ['13.2']
         steps:
-            -
-                uses: actions/checkout@v2
+            -   name: "Checkout"
+                uses: actions/checkout@v4
 
-            -
-                name: Validate composer.json
-                run: Build/Scripts/runTests.sh -s composerValidate
+            -   name: Validate composer.json
+                run: Build/Scripts/runTests.sh -s composer validate
 
-            -
-                name: Cache composer dependencies
-                uses: actions/cache@v1
+            -   name: Cache dependencies installed with composer
+                uses: actions/cache@v4
                 with:
-                    path: ~/.composer/cache
-                    key: composer
+                    key: "php${{ matrix.php-version }}-composer-${{ hashFiles('**/composer.json') }}"
+                    path: .cache/composer
+                    restore-keys: "php${{ matrix.php-version }}-composer-\n"
 
-            -
-                name: Install composer dependencies
-                run: Build/Scripts/runTests.sh -s composerInstall
+            -   name: Install composer dependencies
+                run: Build/Scripts/runTests.sh -s composer install
 
-            -
-                name: PHP Linting
+            -   name: PHP Linting
                 run: Build/Scripts/runTests.sh -s lintPhp
 
-            -
-                name: Editorconfig Linting
+            -   name: Editorconfig Linting
                 run: Build/Scripts/runTests.sh -s lintEditorconfig
 
 
     unittest:
-        runs-on: ubuntu-latest
-
+        runs-on: ubuntu-24.04
         strategy:
             max-parallel: 4
             matrix:
-                php-versions: [7.4, '8.0', 8.1, 8.2]
-                typo3-versions: [11, 12]
-                exclude:
-                    -
-                        php-versions: 7.4
-                        typo3-versions: 12
+                php-versions: ['8.2']
+                typo3-versions: ['13.2']
 
-        name: Unit (PHP ${{ matrix.php-versions }}, TYPO3 ${{ matrix.typo3-versions }})
+        name: Unit Testing (PHP ${{ matrix.php-versions }}, TYPO3 ${{ matrix.typo3-versions }})
         steps:
-            -
-                uses: actions/checkout@v2
+            -   name: "Checkout"
+                uses: actions/checkout@v4
 
-            -
-                name: Validate composer.json
-                run: Build/Scripts/runTests.sh -p ${{ matrix.php-versions }} -t ${{ matrix.typo3-versions }} -s composerValidate
+            -   name: Validate composer.json
+                run: Build/Scripts/runTests.sh -s composer validate
 
-            -
-                name: Cache composer dependencies
-                uses: actions/cache@v1
+            -   name: Cache dependencies installed with composer
+                uses: actions/cache@v4
                 with:
-                    path: ~/.composer/cache
-                    key: php-${{ matrix.php-versions }}-typo3-${{ matrix.typo3-versions }}
+                    key: "php${{ matrix.php-version }}-composer-${{ hashFiles('**/composer.json') }}"
+                    path: .cache/composer
+                    restore-keys: "php${{ matrix.php-version }}-composer-\n"
 
-            -
-                name: Install composer dependencies
-                run: Build/Scripts/runTests.sh -p ${{ matrix.php-versions }} -t ${{ matrix.typo3-versions }} -s composerInstall
+            -   name: Install composer dependencies
+                run: Build/Scripts/runTests.sh -p ${{ matrix.php-versions }} -t ${{ matrix.typo3-versions }} -s composerUpdateMin
 
-            -
-                name: Automated Unit Testing
-                run: Build/Scripts/runTests.sh -p ${{ matrix.php-versions }} -t ${{ matrix.typo3-versions }} -s unit
+            -   name: Automated Unit Testing
+                run: Build/Scripts/runTests.sh -s unit
 
 
-    functionaltest:
-         runs-on: ubuntu-latest
+    functional:
+        runs-on: ubuntu-24.04
+        strategy:
+            max-parallel: 2
+            matrix:
+                php-versions: ['8.2']
+                typo3-versions: ['13.2']
 
-         strategy:
-             max-parallel: 4
-             matrix:
-                 php-versions: [ 7.4, '8.0', 8.1, 8.2 ]
-                 typo3-versions: [ 11, 12 ]
-                 exclude:
-                     -
-                        php-versions: 7.4
-                        typo3-versions: 12
+        name: Functional Testing (PHP ${{ matrix.php-versions }}, TYPO3 ${{ matrix.typo3-versions }})
+        steps:
+            -   name: "Checkout"
+                uses: actions/checkout@v4
 
-         name: Functional (PHP ${{ matrix.php-versions }}, TYPO3 ${{ matrix.typo3-versions }})
-         steps:
-             -
-                 uses: actions/checkout@v2
+            -   name: Validate composer.json
+                run: Build/Scripts/runTests.sh -s composer validate
 
-             -
-                 name: Validate composer.json
-                 run: Build/Scripts/runTests.sh -p ${{ matrix.php-versions }} -t ${{ matrix.typo3-versions }} -s composerValidate
+            -   name: Cache dependencies installed with composer
+                uses: actions/cache@v4
+                with:
+                    key: "php${{ matrix.php-version }}-composer-${{ hashFiles('**/composer.json') }}"
+                    path: .cache/composer
+                    restore-keys: "php${{ matrix.php-version }}-composer-\n"
 
-             -
-                 name: Cache composer dependencies
-                 uses: actions/cache@v1
-                 with:
-                     path: ~/.composer/cache
-                     key: php-${{ matrix.php-versions }}-typo3-${{ matrix.typo3-versions }}
+            -   name: Install composer dependencies
+                run: Build/Scripts/runTests.sh -p ${{ matrix.php-versions }} -t ${{ matrix.typo3-versions }} -s composerUpdateMin
 
-             -
-                 name: Install composer dependencies
-                 run: Build/Scripts/runTests.sh -p ${{ matrix.php-versions }} -t ${{ matrix.typo3-versions }} -s composerInstall
-
-             -
-                 name: Automated Functional Testing
-                 run: Build/Scripts/runTests.sh -p ${{ matrix.php-versions }} -t ${{ matrix.typo3-versions }} -s functional
+            -   name: Automated Unit Testing
+                run: Build/Scripts/runTests.sh -s functional
