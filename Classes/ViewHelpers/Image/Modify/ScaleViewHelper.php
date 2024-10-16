@@ -24,8 +24,8 @@ class ScaleViewHelper extends AbstractViewHelper
             return $imageSource;
         }
         if ($this->arguments['height'] || $this->arguments['width']) {
-            $heightFactor = $this->arguments['height'] ? $this->arguments['height'] / $imageSource->getCroppedWidth() : 1;
-            $widthFactor = $this->arguments['width'] ? $this->arguments['width'] / $imageSource->getCroppedHeight() : 1;
+            $heightFactor = $this->arguments['height'] ? $this->arguments['height'] / $imageSource->getCroppedHeight() : 1;
+            $widthFactor = $this->arguments['width'] ? $this->arguments['width'] / $imageSource->getCroppedWidth() : 1;
             $scaleFactor = ($this->arguments['maxDimensions'])
                 ? min($heightFactor, $widthFactor)
                 : max($heightFactor, $widthFactor);
