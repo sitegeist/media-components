@@ -1,0 +1,2 @@
+# cat=Format/enable; type=string; label=Auto WebP conversion: for specific formats, "," separated;
+autoWebpConversionFormats =

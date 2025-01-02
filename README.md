@@ -12,6 +12,12 @@ This extension provides ready-to-use [Fluid Components](https://github.com/siteg
 * Video files
     * [HTML5 video tag with support for subtitles](./Resources/Private/Components/Video/Video.html)
 
+
+## WebP conversion
+
+As these components are such basic atoms, you could use them to change the format of any image to WebP to reduce file sizes. The extension configuration contains a list of file extensions that will be converted to WebP if not explicitly defined with `format=`.
+You colud use `autoWebpConversionFormats` with `gif,jpg,jpeg,tif,tiff,bmp,pcx,tga,png,pdf,ai` to get full conversion to WebP (without `svg` as it already has a smaller file size).
+
 ## Usage
 
 We use the public namespace from fluid-components.
