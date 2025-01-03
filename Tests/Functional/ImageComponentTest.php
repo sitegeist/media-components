@@ -15,7 +15,8 @@ class ImageComponentTest extends AbstractComponentTestCase
         return [
             'Only mandatory data provided' => [
                 '<img src="fileadmin/test_files/image.png" height="3840" width="3840" />',
-                '<fc:image src="5" />'
+                '<fc:image src="5" />',
+                '',
             ],
             'All data provided' => [
                 '<img src="fileadmin/_processed_/3/8/csm_image_3c73179ad3.jpg" srcset="fileadmin/_processed_/3/8/csm_image_2fe057fbe4.jpg 400w, fileadmin/_processed_/3/8/csm_image_00a46099c0.jpg 800w, fileadmin/_processed_/3/8/csm_image_622ce9e0c0.jpg 1200w" height="100" width="100" alt="Alt text" title="Title text" loading="lazy" sizes="(min-width: 400px) 400px, (min-width: 800px) 800px, (min-width:1200px) 1200px, 100vw" />',
@@ -32,17 +33,33 @@ class ImageComponentTest extends AbstractComponentTestCase
                     title="Title text"
                     lazyload="true"
                     preload="true"
-                />'
-            ]
+                />',
+                '',
+            ],
+            'Active WebP auto conversion' => [
+                '<img src="fileadmin/_processed_/3/8/csm_image_4458ca8493.webp" height="3840" width="3840" />',
+                '<fc:image src="5" />',
+                'jpeg, png',
+            ],
+            'Forced Format WebP auto conversion' => [
+                '<img src="fileadmin/test_files/image.png" height="3840" width="3840" />',
+                '<fc:image src="5" format="png" />',
+                'jpeg, png',
+            ],
+            'Not applying WebP auto conversion' => [
+                '<img src="fileadmin/test_files/image.png" height="3840" width="3840" />',
+                '<fc:image src="5" />',
+                'jpeg, ai',
+            ],
         ];
     }
 
     #[Test]
     #[DataProvider('imageComponentTestProvider')]
-    public function imageComponentTest(string $expectedResult, string $input): void {
+    public function imageComponentTest(string $expectedResult, string $input, string $autoWebpConversionFormats): void {
+        $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['media_components']['autoWebpConversionFormats'] = $autoWebpConversionFormats;
         $view = $this->getTestView($input);
         $result = $this->cleanUpTestResult($view->render());
-
         $this->assertStringContainsString($expectedResult, $result);
     }
 }
