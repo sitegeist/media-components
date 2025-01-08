@@ -4,6 +4,8 @@ declare(strict_types=1);
 namespace Sitegeist\MediaComponents\ViewHelpers\Image\Modify;
 
 use Sitegeist\MediaComponents\Domain\Model\ImageSource;
+use SMS\FluidComponents\Domain\Model\FalImage;
+use SMS\FluidComponents\Domain\Model\PlaceholderImage;
 use SMS\FluidComponents\Interfaces\ProcessableImage;
 use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -20,11 +22,10 @@ class FormatViewHelper extends AbstractViewHelper
     public function render(): ImageSource
     {
         $imageSource = $this->arguments['imageSource'] ?? $this->renderChildren();
-
         if (!$this->arguments['format']
             && $imageSource->getOriginalImage() instanceof ProcessableImage
             && in_array(
-                $imageSource->getOriginalImage()->getFile()->getExtension(),
+                $this->getFormat($imageSource->getOriginalImage()),
                 $this->getAutoWebpConversionFormats()
             )
         ) {
@@ -42,5 +43,14 @@ class FormatViewHelper extends AbstractViewHelper
     {
         $extensionConfiguration = GeneralUtility::makeInstance(ExtensionConfiguration::class);
         return GeneralUtility::trimExplode(',', $extensionConfiguration->get('media_components', 'autoWebpConversionFormats'), true);
+    }
+
+    private function getFormat(ProcessableImage $image): string
+    {
+        return match (true) {
+            $image instanceof PlaceholderImage => $image->getFormat(),
+            $image instanceof FalImage => $image->getFile()->getExtension(),
+            default => '',
+        };
     }
 }
