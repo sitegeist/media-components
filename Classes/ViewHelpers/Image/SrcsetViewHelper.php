@@ -31,7 +31,7 @@ class SrcsetViewHelper extends AbstractViewHelper
         return self::generateSrcsetString($this->arguments['imageSource'], $this->arguments['srcset'], $this->arguments['base']);
     }
 
-    public static function generateSrcsetString(ImageSource $imageSource, SourceSet $srcset, ImageSource $base = null): string
+    public static function generateSrcsetString(ImageSource $imageSource, SourceSet $srcset, ?ImageSource $base = null): string
     {
         $output = [];
         $base ??= $imageSource;
