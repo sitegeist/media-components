@@ -43,6 +43,8 @@ We use the public namespace from fluid-components.
 ```
 
 ### Pictures
+Use `pictureClass` for the outer `<picture>` element; `class` still applies to the fallback `<img>`.
+
 ```html
 <fc:picture
     src="{originalImage: {fileUid: 5}, srcset: \'400,800,1200\'}"
@@ -54,6 +56,8 @@ We use the public namespace from fluid-components.
     title="Title text"
     lazyload="true"
     preload="true"
+    pictureClass="my-picture"
+    class="my-image"
 />
 ```
 
