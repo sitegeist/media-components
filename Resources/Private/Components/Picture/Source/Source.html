@@ -32,7 +32,7 @@
             srcset="{srcset}"
             sizes="{sizes}"
             media="{media}"
-            type="image/{croppedImage.format}"
+            type="{croppedImage.originalImage.file.properties.mime_type}"
         />
         <f:if condition="{preload}">
             <f:asset.css
