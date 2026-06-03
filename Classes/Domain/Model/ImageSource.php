@@ -149,6 +149,19 @@ class ImageSource implements
         return $this->format;
     }
 
+    public function getMimeType(): ?string
+    {
+        if ($this->format !== '') {
+            return match (strtolower($this->format)) {
+                'jpg', 'jpeg' => 'image/jpeg',
+                'svg' => 'image/svg+xml',
+                default => 'image/' . strtolower($this->format),
+            };
+        }
+
+        return $this->originalImage?->getFile()?->getProperties()['mime_type'] ?? null;
+    }
+
     public function setFormat(string $format): self
     {
         $this->format = $format;
