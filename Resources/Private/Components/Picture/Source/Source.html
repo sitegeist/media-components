@@ -32,12 +32,12 @@
             srcset="{srcset}"
             sizes="{sizes}"
             media="{media}"
-            type="{croppedImage.format}"
+            type="{croppedImage.image.file.mimeType}"
         />
         <f:if condition="{preload}">
             <f:asset.css
                 identifier="{src.publicUrl}"
-                type="{src.originalImage.file.properties.mime_type}"
+                type="{src.image.file.mimeType}"
                 rel="preload"
                 as="image"
                 href="{src.publicUrl}"
