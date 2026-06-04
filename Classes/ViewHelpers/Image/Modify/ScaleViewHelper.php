@@ -5,6 +5,7 @@ namespace Sitegeist\MediaComponents\ViewHelpers\Image\Modify;
 
 use Sitegeist\MediaComponents\Domain\Model\ImageSource;
 use SMS\FluidComponents\Interfaces\ImageWithDimensions;
+use SMS\FluidComponents\Interfaces\ProcessableImage;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 
 class ScaleViewHelper extends AbstractViewHelper
@@ -20,9 +21,17 @@ class ScaleViewHelper extends AbstractViewHelper
     public function render(): ImageSource
     {
         $imageSource = $this->arguments['imageSource'] ?? $this->renderChildren();
-        if (!($imageSource->getOriginalImage() instanceof ImageWithDimensions)) {
+        if (
+            !($imageSource->getOriginalImage() instanceof ImageWithDimensions)
+            || !($imageSource->getOriginalImage() instanceof ProcessableImage)
+        ) {
             return $imageSource;
         }
+
+        if (!$imageSource->getCroppedHeight() || !$imageSource->getCroppedWidth()) {
+            return $imageSource;
+        }
+
         if ($this->arguments['height'] || $this->arguments['width']) {
             $heightFactor = $this->arguments['height'] ? $this->arguments['height'] / $imageSource->getCroppedHeight() : 1;
             $widthFactor = $this->arguments['width'] ? $this->arguments['width'] / $imageSource->getCroppedWidth() : 1;
