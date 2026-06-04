@@ -27,7 +27,7 @@
                 <fc:picture.source
                     src="{f:if(condition: source.originalImage, then: source, else: src)}"
                     format="{f:if(condition: source.format, then: source.format, else: src.format)}"
-                    crop="{f:if(condition: source.crop, then: source.crop, else: src.crop)}"
+                    crop="{f:if(condition: '!{source.crop.area.empty}', then: source.crop, else: src.crop)}"
                     srcset="{source.srcset}"
                     sizes="{source.sizes}"
                     media="{source.media}"
