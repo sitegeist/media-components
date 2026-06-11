@@ -21,7 +21,7 @@ class CropVariantViewHelper extends AbstractViewHelper
     {
         $this->arguments['image'] ??= $this->renderChildren();
         if (!($this->arguments['image']->getOriginalImage() instanceof ImageWithDimensions)) {
-            return $this->arguments['image'];
+            return new CropArea;
         }
 
         if ($this->arguments['image']->getOriginalImage() instanceof ImageWithCropVariants) {
