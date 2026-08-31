@@ -2,10 +2,11 @@
 
 namespace Sitegeist\MediaComponents\Tests\Unit;
 
+use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 use PHPUnit\Framework\Attributes\Test;
 use Sitegeist\MediaComponents\Domain\Model\SourceSet;
 
-class SourceSetTest extends \TYPO3\TestingFramework\Core\Unit\UnitTestCase
+class SourceSetTest extends UnitTestCase
 {
     #[Test]
     public function testFromArray(): void

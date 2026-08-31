@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 $EM_CONF['media_components'] = [
     'title' => 'Media Components',
     'description' => 'Ready-to-use fluid components for embedding different media files',
@@ -9,8 +12,8 @@ $EM_CONF['media_components'] = [
     'version' => '',
     'constraints' => [
         'depends' => [
-            'typo3' => '13.2.0-13.2.99',
-            'php' => '8.2.0-8.3.99'
+            'typo3' => '14.0.0-14.3.99',
+            'php' => '8.2.0-8.4.99'
         ],
         'conflicts' => [
         ],

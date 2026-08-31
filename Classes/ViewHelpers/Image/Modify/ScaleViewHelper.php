@@ -14,7 +14,7 @@ class ScaleViewHelper extends AbstractViewHelper
         $this->registerArgument('imageSource', ImageSource::class, 'Image source (if not provided via content)');
         $this->registerArgument('height', 'integer', 'Desired image height');
         $this->registerArgument('width', 'integer', 'Desired image width');
-        $this->registerArgument('maxDimensions', 'boolean', 'If true, height and width will be considered maximums', true, false);
+        $this->registerArgument('maxDimensions', 'boolean', 'If true, height and width will be considered maximums', true);
     }
 
     public function render(): ImageSource

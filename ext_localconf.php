@@ -10,7 +10,7 @@ use TYPO3\CMS\Core\Imaging\ImageManipulation\Area;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
-defined('TYPO3') or die();
+defined('TYPO3') || die();
 
 $GLOBALS['TYPO3_CONF_VARS']['SYS']['fluid']['namespaces']['fc'] ??= [];
 $GLOBALS['TYPO3_CONF_VARS']['SYS']['fluid']['namespaces']['fc'][] = 'Sitegeist\\MediaComponents\\Components';

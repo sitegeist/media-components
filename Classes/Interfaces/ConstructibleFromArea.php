@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Sitegeist\MediaComponents\Interfaces;
 
 use TYPO3\CMS\Core\Imaging\ImageManipulation\Area;

@@ -57,7 +57,7 @@ class SourceSet implements ConstructibleFromArray, ConstructibleFromInteger, Con
 
     public function setSrcset(array $srcset): self
     {
-        $this->srcset = array_filter(array_map('trim', $srcset));
+        $this->srcset = array_filter(array_map(trim(...), $srcset));
         return $this;
     }
 

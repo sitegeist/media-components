@@ -2,11 +2,12 @@
 
 namespace Sitegeist\MediaComponents\Tests\Unit;
 
+use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 use PHPUnit\Framework\Attributes\Test;
 use Sitegeist\MediaComponents\Domain\Model\CropArea;
 use TYPO3\CMS\Core\Imaging\ImageManipulation\Area;
 
-class CropAreaTest extends \TYPO3\TestingFramework\Core\Unit\UnitTestCase
+class CropAreaTest extends UnitTestCase
 {
     #[Test]
     public function testFromArray(): void

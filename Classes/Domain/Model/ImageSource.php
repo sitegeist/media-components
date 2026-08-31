@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Sitegeist\MediaComponents\Domain\Model;
 
+use SMS\FluidComponents\Exception\InvalidArgumentException;
 use Sitegeist\MediaComponents\Domain\Model\CropArea;
 use Sitegeist\MediaComponents\Domain\Model\SourceSet;
 use Sitegeist\MediaComponents\Interfaces\ConstructibleFromImage;
@@ -27,7 +28,8 @@ class ImageSource implements
     ConstructibleFromFileInterface,
     ConstructibleFromImage,
     ConstructibleFromInteger,
-    ConstructibleFromString
+    ConstructibleFromString,
+    \Stringable
 {
     /**
      * Image with applied modifications
@@ -58,7 +60,7 @@ class ImageSource implements
 
         try {
             $image = $argumentConverter->convertValueToType($value['originalImage'] ?? $value, Image::class);
-        } catch (\SMS\FluidComponents\Exception\InvalidArgumentException) {
+        } catch (InvalidArgumentException) {
             // TODO better error handling here:
             // Image is not required, but invalid combination of parameters should
             // be catched
