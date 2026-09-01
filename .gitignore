@@ -2,3 +2,4 @@
 /var
 .cache
 /Build/phpunit/.phpunit.cache/
+composer.lock

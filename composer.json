@@ -23,6 +23,12 @@
         "issues": "https://github.com/sitegeist/media-components/issues"
     },
     "version": "0.3.0",
+    "repositories": [
+        {
+            "type": "path",
+            "url": "../fluid-components"
+        }
+    ],
     "require": {
         "php": "^8.4",
         "sitegeist/fluid-components": "^3.8.1 || ^4.0",
@@ -48,7 +54,6 @@
     "config": {
         "vendor-dir": ".Build/vendor",
         "bin-dir": ".Build/bin",
-        "lock": false,
         "allow-plugins": {
             "typo3/cms-composer-installers": true,
             "typo3/class-alias-loader": true
