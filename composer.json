@@ -62,7 +62,10 @@
     "extra": {
         "typo3/cms": {
             "extension-key": "media_components",
-            "web-dir": ".Build/public"
+            "web-dir": ".Build/public",
+            "Package": {
+                "providesPackages": []
+            }
         }
     },
     "scripts": {

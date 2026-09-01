@@ -18,7 +18,7 @@ class VideoComponentTest extends AbstractComponentTestCase
                 '<fc:video sources="{0: 7}" />'
             ],
             'All data provided' => [
-                '<video controls="controls" loop="loop" playsinline="playsinline" width="800" height="600" preload="metadata" poster="fileadmin/test_files/image.jpg" crossorigin="anonymous"><source src="fileadmin/test_files/video.mp4" type="video/mp4" /><track src="fileadmin/test_files/subtitles.vtt" />                                        Fallback        </video>',
+                '<video controls="controls" loop="loop" playsinline="playsinline" width="800" height="600" preload="metadata" poster="fileadmin/test_files/image.jpg" crossorigin="anonymous"><source src="fileadmin/test_files/video.mp4" type="video/mp4" /><track default="0" kind="subtitles" srclang="en" src="fileadmin/test_files/subtitles.vtt" />                                        Fallback        </video>',
                 '<fc:video
                     sources="{0: 7}"
                     tracks="{0: 8}"
