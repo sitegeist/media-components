@@ -22,7 +22,6 @@
     "support": {
         "issues": "https://github.com/sitegeist/media-components/issues"
     },
-    "version": "0.3.0",
     "repositories": [
         {
             "type": "path",
