@@ -10,6 +10,7 @@
     <fc:param name="src" type="Sitegeist\MediaComponents\Domain\Model\ImageSource" />
     <fc:param name="alt" type="string" optional="1" />
     <fc:param name="title" type="string" optional="1" />
+    <fc:param name="additionalAttributes" type="array" optional="1" description="Additional tag attributes. They will be added directly to the resulting HTML tag." />
 
     <f:comment><!-- Cropping --></f:comment>
     <fc:param name="cropVariant" type="string" optional="1" />
@@ -27,6 +28,7 @@
     <fc:param name="lazyload" type="boolean" optional="1" />
     <fc:param name="preload" type="boolean" optional="1" />
 
+
     <fc:renderer>
         <f:if condition="!{crop} && {cropVariant}">
             <f:variable name="crop" value="{src -> mvh:image.cropVariant(name: cropVariant)}" />
@@ -43,6 +45,7 @@
             loading="{f:if(condition: lazyload, then: 'lazy')}"
             sizes="{sizes}"
             class="{class}"
+            :attributeList="{additionalAttributes}"
         />
         <f:if condition="{preload}">
             <f:asset.css

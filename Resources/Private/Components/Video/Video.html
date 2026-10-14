@@ -19,6 +19,7 @@
     <fc:param name="fallbackText" type="string" optional="1" />
     <fc:param name="crossorigin" type="string" optional="1" />
     <fc:param name="playsinline" type="boolean" optional="1" />
+    <fc:param name="additionalAttributes" type="array" optional="1" description="Additional tag attributes. They will be added directly to the resulting HTML tag." />
 
     <fc:renderer>
         <ft:video
@@ -32,6 +33,7 @@
             poster="{f:if(condition: poster, then: poster.publicUrl)}"
             crossorigin="{crossorigin}"
             playsinline="{playsinline}"
+            :attributeList="{additionalAttributes}"
         >
             <f:for each="{sources}" as="source">
                 <ft:source

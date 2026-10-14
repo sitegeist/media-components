@@ -8,6 +8,7 @@
 
 <fc:component>
     <fc:param name="src" type="Sitegeist\MediaComponents\Domain\Model\ImageSource" />
+    <fc:param name="additionalAttributes" type="array" optional="1" description="Additional tag attributes. They will be added directly to the resulting HTML tag." />
 
     <f:comment><!-- Cropping --></f:comment>
     <fc:param name="cropVariant" type="string" optional="1" />
@@ -33,6 +34,7 @@
             sizes="{sizes}"
             media="{media}"
             type="{croppedImage.image.file.mimeType}"
+            :attributeList="{additionalAttributes}"
         />
         <f:if condition="{preload}">
             <f:asset.css

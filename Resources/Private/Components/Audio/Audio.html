@@ -14,6 +14,7 @@
     <fc:param name="preload" type="string" optional="1" default="auto" />
     <fc:param name="fallbackText" type="string" optional="1" />
     <fc:param name="crossorigin" type="string" optional="1" />
+    <fc:param name="additionalAttributes" type="array" optional="1" description="Additional tag attributes. They will be added directly to the resulting HTML tag." />
 
     <fc:renderer>
         <ft:audio
@@ -23,6 +24,7 @@
             muted="{muted}"
             preload="{preload}"
             crossorigin="{crossorigin}"
+            :attributeList="{additionalAttributes}"
         >
             <f:for each="{sources}" as="source">
                 <ft:source
