@@ -46,7 +46,7 @@
                 alt="{alt}"
                 title="{title}"
                 lazyload="{lazyload}"
-                preload="{preload}"
+                preload="{f:if(condition: sources, then: false, else: preload)}"
                 class="{class}"
             />
         </ft:picture>
