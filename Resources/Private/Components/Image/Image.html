@@ -45,15 +45,17 @@
             class="{class}"
         />
         <f:if condition="{preload}">
-            <f:asset.css
-                identifier="{fallbackImage.publicUrl}"
-                type="{fallbackImage.originalImage.file.properties.mime_type}"
-                rel="preload"
-                as="image"
-                href="{fallbackImage.publicUrl}"
-                additionalAttributes="{imagesrcset: '{croppedImage -> mvh:image.srcset(srcset: srcset, base: fallbackImage)}', imagesizes: sizes}"
-                importance="high"
-            />
+            <mvh:page.headerData>
+                <link
+                    rel="preload"
+                    as="image"
+                    type="{fallbackImage.image.file.mimeType}"
+                    href="{fallbackImage.publicUrl}"
+                    imagesrcset="{croppedImage -> mvh:image.srcset(srcset: srcset, base: fallbackImage)}"
+                    imagesizes="{sizes}"
+                    fetchpriority="high"
+                >
+            </mvh:page.headerData>
         </f:if>
     </fc:renderer>
 </fc:component>

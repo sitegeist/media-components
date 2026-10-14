@@ -35,15 +35,18 @@
             type="{croppedImage.image.file.mimeType}"
         />
         <f:if condition="{preload}">
-            <f:asset.css
-                identifier="{src.publicUrl}"
-                type="{src.image.file.mimeType}"
-                rel="preload"
-                as="image"
-                href="{src.publicUrl}"
-                additionalAttributes="{imagesrcset: srcset, imagesizes: sizes}"
-                importance="high"
-            />
+            <mvh:page.headerData>
+                <link
+                    rel="preload"
+                    as="image"
+                    type="{croppedImage.image.file.mimeType}"
+                    href="{croppedImage.publicUrl}"
+                    imagesrcset="{srcset}"
+                    imagesizes="{sizes}"
+                    media="{media}"
+                    fetchpriority="high"
+                >
+            </mvh:page.headerData>
         </f:if>
     </fc:renderer>
 </fc:component>
